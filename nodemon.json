@@ -1,0 +1,6 @@
+{
+  "watch": ["src"],
+  "ext": "js,json,ejs",
+  "ignore": ["src/public/*"],
+  "exec": "node ./src/app.js"
+}

@@ -1,0 +1,20 @@
+{
+  "name": "express-shared-app",
+  "version": "1.0.0",
+  "description": "A simple Express application.",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js --ext js,ejs,css"
+  },
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.17.1",
+    "multer": "^2.0.0"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
