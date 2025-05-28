@@ -5,6 +5,7 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const fileManager = require('../utils/fileManager');
+const fs = require('fs');
 
 // Configure multer for optimized uploads
 const storage = multer.diskStorage({
@@ -72,6 +73,30 @@ router.delete('/file/:filename', async (req, res) => {
             success: false, 
             error: 'Server error while deleting file' 
         });
+    }
+});
+
+const sharedDir = path.join(__dirname, '../../shared-files');
+
+// Delete all files that end with -originalname
+router.delete('/file/partial/:originalname', async (req, res) => {
+    try {
+        const original = req.params.originalname;
+        const files = await fs.promises.readdir(sharedDir);
+        let deleted = false;
+        for (const file of files) {
+            if (file.endsWith(`-${original}`)) {
+                await fs.promises.unlink(path.join(sharedDir, file));
+                deleted = true;
+            }
+        }
+        if (deleted) {
+            res.json({ success: true });
+        } else {
+            res.status(404).json({ success: false, error: 'No partial file found' });
+        }
+    } catch (err) {
+        res.status(500).json({ success: false, error: 'Server error' });
     }
 });
 

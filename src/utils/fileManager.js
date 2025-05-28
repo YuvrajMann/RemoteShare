@@ -22,9 +22,9 @@ class FileManager {
                 const stats = await fs.stat(path.join(this.sharedFolder, filename));
                 return {
                     id: filename,
-                    name: filename,
+                    name: this.getDisplayName(filename),
                     size: this.formatFileSize(stats.size),
-                    created: stats.birthtime.toLocaleDateString()
+                    created: `${stats.birthtime.toLocaleDateString()} ${stats.birthtime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
                 };
             }));
         } catch (error) {
@@ -62,6 +62,10 @@ class FileManager {
             console.error('Error deleting file:', error);
             return false;
         }
+    }
+
+    getDisplayName(filename) {
+        return filename.replace(/^\d+-/, '');
     }
 }
 
