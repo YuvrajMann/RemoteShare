@@ -222,3 +222,208 @@ body {
 .cancel-upload.btn-flat:hover {
     background: rgba(229,57,53,0.08) !important;
 }
+
+/* Light mode styles */
+body:not(.dark-mode) {
+  background: #f5f5f5 !important;
+  color: #222 !important;
+}
+body:not(.dark-mode) .container,
+body:not(.dark-mode) .file-container,
+body:not(.dark-mode) .progress-container,
+body:not(.dark-mode) .file-item {
+  background: #f8f9fa !important;
+  color: #222 !important;
+}
+body:not(.dark-mode) .material-icons,
+body:not(.dark-mode) .filename-text,
+body:not(.dark-mode) .file-metadata,
+body:not(.dark-mode) .logo {
+  color: #222 !important;
+}
+body:not(.dark-mode) .btn,
+body:not(.dark-mode) .btn-flat {
+  background: #1976d2 !important;
+  color: #fff !important;
+}
+
+body:not(.dark-mode) .btn:hover,
+body:not(.dark-mode) .btn-flat:hover {
+  background: #125ea6 !important;
+}
+body:not(.dark-mode) .progress {
+  background: #e0e0e0 !important;
+}
+body:not(.dark-mode) .determinate {
+  background: #1976d2 !important;
+}
+
+/* Light mode header and logo */
+body:not(.dark-mode) .header {
+  background: #f8f9fa !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+}
+
+body:not(.dark-mode) .logo {
+  color: #1976d2 !important;
+}
+
+body:not(.dark-mode) #files-title {
+  color: #1976d2 !important;
+}
+
+/* Make action icons (download, delete, upload) white in light mode */
+body:not(.dark-mode) .action-buttons .btn-floating i,
+body:not(.dark-mode) #upload-btn .material-icons {
+  color: #fff !important;
+}
+
+/* Make all other .material-icons blue in light mode */
+body:not(.dark-mode) .material-icons {
+  color: #1976d2 !important;
+}
+
+/* Ensure theme toggle icon stays white in both modes */
+.theme-toggle-btn .material-icons {
+  color: #fff !important;
+}
+
+body.dark-mode {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+body.dark-mode .header {
+  background-color: #1e1e1e;
+}
+
+body.dark-mode .file-container {
+  background-color: #2c2c2c;
+}
+
+body.dark-mode .file-item {
+  background-color: #3c3c3c;
+  border: 1px solid #444;
+}
+
+body.dark-mode .btn {
+  background-color: #0078d4;
+}
+
+body.dark-mode .btn:hover {
+  background-color: #106ebe;
+}
+
+body.dark-mode .progress {
+  background-color: #333;
+}
+
+body.dark-mode .determinate {
+  background-color: #0078d4;
+}
+
+body.dark-mode .logo {
+  color: #0078d4;
+}
+
+body.dark-mode #files-title {
+  color: #0078d4;
+}
+
+body.dark-mode .material-icons {
+  color: #fff;
+}
+
+body.dark-mode .theme-toggle-btn {
+  background: #23272a;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+}
+
+body.dark-mode .theme-toggle-btn:hover {
+  background: #333;
+}
+
+body.dark-mode .cancel-upload.btn-flat {
+  background: rgba(229,57,53,0.08) !important;
+}
+
+body:not(.dark-mode) .file-item {
+  border: 1px solid #e3e3e3 !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+
+.theme-toggle-btn {
+  margin-left: auto;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1976d2 !important; /* Always blue background */
+  box-shadow: 0 2px 8px rgba(60,60,60,0.10), 0 1.5px 4px rgba(60,60,60,0.08);
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  position: relative;
+  z-index: 2;
+}
+.theme-toggle-btn:hover {
+  background: #125ea6 !important;
+}
+.theme-toggle-btn .material-icons {
+  font-size: 28px;
+  color: #fff !important;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.18);
+}
+
+/* Toggle button: Light mode */
+body:not(.dark-mode) .theme-toggle-btn {
+  background: #fff !important;
+  border: 1.5px solid #1976d2;
+  box-shadow: 0 2px 8px rgba(60,60,60,0.10), 0 1.5px 4px rgba(60,60,60,0.08);
+}
+body:not(.dark-mode) .theme-toggle-btn .material-icons {
+  color: #1976d2 !important;
+}
+
+/* Toggle button: Dark mode */
+body.dark-mode .theme-toggle-btn {
+  background: #23272a !important;
+  border: 1.5px solid #444;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+}
+body.dark-mode .theme-toggle-btn .material-icons {
+  color: #fff !important;
+}
+
+body.dark-mode .logo,
+body.dark-mode #files-title {
+  color: #fff !important;
+}
+
+body:not(.dark-mode) .progress-container {
+  background: #f8f9fa !important;
+  color: #222 !important;
+  border: 1px solid #e3e3e3;
+}
+
+body:not(.dark-mode) .progress-text,
+body:not(.dark-mode) .upload-speed,
+body:not(.dark-mode) .filename {
+  color: #1976d2 !important;
+}
+
+body:not(.dark-mode) .cancel-upload.btn-flat {
+  background: #fff !important;
+  border: 1px solid #e53935 !important;
+}
+
+body:not(.dark-mode) .cancel-upload.btn-flat:hover {
+  background: #ffeaea !important;
+}
+
+body:not(.dark-mode) .cancel-upload.btn-flat .material-icons {
+  color: #e53935 !important;
+} 

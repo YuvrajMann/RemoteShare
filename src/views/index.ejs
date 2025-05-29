@@ -11,11 +11,14 @@
 
 <body>
   <div class="header">
-    <div class="container">
-      <div class="logo">
+    <div class="container" style="display: flex; align-items: center; justify-content: space-between;">
+      <div class="logo" style="display: flex; align-items: center;">
         <i class="material-icons">folder_shared</i>
         Remote Share
       </div>
+      <button id="theme-toggle" class="theme-toggle-btn">
+        <i id="theme-icon" class="material-icons">dark_mode</i>
+      </button>
     </div>
   </div>
 
@@ -131,6 +134,21 @@
 
       // Handle dropped files
       dropZone.addEventListener('drop', handleDrop, false);
+
+      // Theme toggle logic
+      const themeToggle = document.getElementById('theme-toggle');
+      const themeIcon = document.getElementById('theme-icon');
+      // Load saved theme
+      if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+        themeIcon.textContent = 'light_mode';
+      }
+      themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        themeIcon.textContent = isDark ? 'light_mode' : 'dark_mode';
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      });
 
       function preventDefaults(e) {
         e.preventDefault();

@@ -18,10 +18,11 @@ if not exist node_modules (
     call npm install
 )
 
-REM Start the server
+REM Start the server using PowerShell to keep it running
 echo.
-echo Starting RemoteShare Server...
+echo Starting RemoteShare Server in background mode...
 echo.
-node src/app.js
-
-pause
+start /B powershell -WindowStyle Hidden -Command "node src/app.js"
+echo Server is now running in the background. You can close this window.
+echo To stop the server, you'll need to end the Node.js process from Task Manager.
+timeout /t 10
