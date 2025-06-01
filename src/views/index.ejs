@@ -7,6 +7,7 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
   <link rel="stylesheet" href="/css/styles.css">
+  <link rel="icon" type="image/x-icon" href="/favicon.png">
 </head>
 
 <body>
@@ -16,9 +17,14 @@
         <i class="material-icons">folder_shared</i>
         Remote Share
       </div>
-      <button id="theme-toggle" class="theme-toggle-btn">
-        <i id="theme-icon" class="material-icons">dark_mode</i>
-      </button>
+      <div style="display: flex; align-items: center;">
+        <button id="theme-toggle" class="theme-toggle-btn">
+          <i id="theme-icon" class="material-icons">dark_mode</i>
+        </button>
+        <button id="qr-toggle" class="theme-toggle-btn" style="margin-left: 12px;">
+          <i class="material-icons">qr_code</i>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -105,8 +111,23 @@
     </div>
   </div>
 
+  <!-- QR Code Modal -->
+  <div id="qr-modal" class="modal qr-modal-custom">
+    <div class="modal-content">
+      <span id="qr-modal-close" class="material-icons modal-close" style="position:absolute;top:12px;right:16px;cursor:pointer;font-size:26px;">close</span>
+      <h6 class="qr-modal-title">Quick Setup</h6>
+      <p class="qr-modal-desc">Scan this QR code on your other device to open Remote Share:</p>
+      <div id="qrcode" class="qr-modal-qrcode"></div>
+      <p class="qr-modal-url-label">
+        Or enter this address in your browser:<br>
+        <span id="qr-url" class="qr-modal-url"></span>
+      </p>
+    </div>
+  </div>
+
   <!-- Scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       M.AutoInit();
@@ -149,6 +170,33 @@
         themeIcon.textContent = isDark ? 'light_mode' : 'dark_mode';
         localStorage.setItem('theme', isDark ? 'dark' : 'light');
       });
+
+      // QR code modal logic
+      const qrToggle = document.getElementById('qr-toggle');
+      const qrModal = document.getElementById('qr-modal');
+      const qrUrlSpan = document.getElementById('qr-url');
+      const qrModalClose = document.getElementById('qr-modal-close');
+      let qrInstance = null; 
+
+      // Initialize Materialize modal
+      const qrModalInstance = M.Modal.init(qrModal, {endingTop: '20%'});
+
+      qrToggle.addEventListener('click', function() {
+        let url = window.location.origin;
+        qrUrlSpan.textContent = url;
+        // Always create a new QRious instance to avoid rendering issues
+        const qrDiv = document.getElementById('qrcode');
+        qrDiv.innerHTML = '';
+        const qrCanvas = document.createElement('canvas');
+        qrDiv.appendChild(qrCanvas);
+        qrInstance = new QRious({
+          element: qrCanvas,
+          value: url,
+          size: 140
+        });
+        qrModalInstance.open();
+      });
+      qrModalClose.addEventListener('click', () => qrModalInstance.close());
 
       function preventDefaults(e) {
         e.preventDefault();

@@ -38,11 +38,17 @@ body {
     justify-content: space-between;
     align-items: center;
     transition: all 0.3s ease;
+    cursor: pointer;
 }
 
 .file-item:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.file-item.selected {
+  background: rgba(76, 175, 80, 0.18) !important; /* transparent green */
+  border-radius: 8px;
 }
 
 .file-details {
@@ -426,4 +432,177 @@ body:not(.dark-mode) .cancel-upload.btn-flat:hover {
 
 body:not(.dark-mode) .cancel-upload.btn-flat .material-icons {
   color: #e53935 !important;
-} 
+}
+#qr-toggle.theme-toggle-btn {
+  margin-left: 12px;
+}
+#qr-toggle .material-icons {
+  font-size: 28px;
+  color: #fff !important;
+}
+body:not(.dark-mode) #qr-toggle {
+  background: #1976d2 !important;
+  border: 1.5px solid #1976d2;
+}
+body:not(.dark-mode) #qr-toggle .material-icons {
+  color: #1976d2 !important;
+  background: #fff;
+  border-radius: 50%;
+  padding: 4px;
+}
+body.dark-mode #qr-toggle {
+  background: #23272a !important;
+  border: 1.5px solid #444;
+}
+body.dark-mode #qr-toggle .material-icons {
+  color: #fff !important;
+}
+
+/* Compact and theme-aware QR modal */
+.qr-modal-custom {
+  max-width: 320px !important;
+  border-radius: 14px !important;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.13) !important;
+  background: transparent !important; /* Remove background from modal wrapper */
+  border: none !important;            /* Remove border from modal wrapper */
+  padding: 0 !important;
+}
+.qr-modal-custom .modal-content {
+  border-radius: 14px !important;
+  background: #fff !important;
+  color: #222 !important;
+  box-shadow: none !important;
+  border: none !important;
+  text-align: center !important;   /* <-- Add this line */
+  display: flex;
+  flex-direction: column;
+  align-items: center;             /* <-- Add this line */
+  justify-content: center;         /* <-- Add this line */
+}
+.qr-modal-title {
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 1.15rem;
+  color: #1976d2;
+}
+.qr-modal-desc {
+  font-size: 0.98em;
+  margin-bottom: 12px;
+  color: #333;
+}
+.qr-modal-qrcode {
+  display: inline-block;
+  background: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  margin-bottom: 10px;
+}
+.qr-modal-url-label {
+  margin-top: 14px;
+  font-size: 0.93em;
+  color: #888;
+}
+.qr-modal-url {
+  font-weight: bold;
+  color: #1976d2;
+  word-break: break-all;
+}
+.qr-modal-custom .modal-close {
+  color: #888 !important;
+  transition: color 0.2s;
+}
+.qr-modal-custom .modal-close:hover {
+  color: #e53935 !important;
+}
+
+/* Dark mode for QR modal */
+body.dark-mode .qr-modal-custom .modal-content {
+  background: #23272a !important;
+  color: #e0e0e0 !important;
+}
+body.dark-mode .qr-modal-title {
+  color: #fff !important;
+}
+body.dark-mode .qr-modal-desc {
+  color: #bbb !important;
+}
+body.dark-mode .qr-modal-qrcode {
+  background: #23272a !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+}
+body.dark-mode .qr-modal-url-label {
+  color: #aaa !important;
+}
+body.dark-mode .qr-modal-url {
+  color: #fff !important;
+}
+body.dark-mode .qr-modal-custom .modal-close {
+  color: #aaa !important;
+}
+body.dark-mode .qr-modal-custom .modal-close:hover {
+  color: #e57373 !important;
+}
+
+/* Hide default checkbox and use custom green highlight */
+.file-checkbox input[type="checkbox"] {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.file-checkbox {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+  vertical-align: middle;
+  position: relative;
+  cursor: pointer;
+}
+
+.file-checkbox span {
+  display: block;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: transparent;
+  border: 2px solid #4caf50;
+  transition: background 0.2s, border 0.2s;
+  box-sizing: border-box;
+}
+
+.file-checkbox input[type="checkbox"]:checked + span {
+  background: rgba(76, 175, 80, 0.18); /* transparent green */
+  border: 2.5px solid #43a047;
+  box-shadow: 0 0 0 2px #43a04733;
+}
+
+.file-item.selected {
+  background: rgba(76, 175, 80, 0.08);
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.file-checkbox {
+  vertical-align: middle;
+}
+.files-list .file-item {
+  display: flex;
+  align-items: center;
+}
+
+#bulk-actions-bar {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.25s, transform 0.25s;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+}
+#bulk-actions-bar.active {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}

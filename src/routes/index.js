@@ -78,6 +78,11 @@ router.delete('/file/:filename', async (req, res) => {
 
 const sharedDir = path.join(__dirname, '../../shared-files');
 
+// Ensure shared-files directory exists
+if (!fs.existsSync(sharedDir)) {
+    fs.mkdirSync(sharedDir, { recursive: true });
+}
+
 // Delete all files that end with -originalname
 router.delete('/file/partial/:originalname', async (req, res) => {
     try {
