@@ -14,6 +14,8 @@ if (cluster.isMaster) {
     const archiver = require('archiver');
     const fs = require('fs');
     const path = require('path');
+    const cookieParser = require('cookie-parser');
+    const authMiddleware = require('./middleware/auth');
 
     // Increase payload limits (10GB)
     app.use(express.json({limit: '10240mb'})); 
@@ -32,7 +34,9 @@ if (cluster.isMaster) {
     app.set('views', path.join(__dirname, 'views'));
 
     // Middleware
+    app.use(cookieParser());
     app.use(express.json());
+    app.use(authMiddleware);
     app.use(express.urlencoded({ extended: true }));
     //serve static files from the public directory
     app.use(express.static(path.join(__dirname, 'public')));

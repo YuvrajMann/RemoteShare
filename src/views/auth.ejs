@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Enter PIN - RemoteShare</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <style>
+    /* Update existing dark mode styles */
+    body.dark-mode {
+        background-color: #121212;
+        color: #f0f0f0;
+    }
+
+    body.dark-mode .card {
+        background-color: #1e1e1e;
+        border: 1px solid rgba(255,255,255,0.1);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+
+    /* Enhanced PIN input styles for dark mode */
+    body.dark-mode .pin-inputs input {
+        background-color: #2d2d2d;
+        border-color: #404040;
+        color: #fff;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    body.dark-mode .pin-inputs input:focus {
+        border-color: #64b5f6;
+        box-shadow: 0 0 0 2px rgba(33,150,243,0.2), 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    /* Enhanced button styles */
+    .btn.waves-effect.waves-light {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn.waves-effect.waves-light:active {
+        transform: translateY(2px);
+    }
+
+    /* Dark mode button styles */
+    body.dark-mode .btn.waves-effect.waves-light {
+        background-color: #2196f3;
+        box-shadow: 0 4px 12px rgba(33,150,243,0.3);
+    }
+
+    body.dark-mode .btn.waves-effect.waves-light:hover {
+        background-color: #1e88e5;
+        box-shadow: 0 6px 16px rgba(33,150,243,0.4);
+    }
+
+    body.dark-mode .btn.waves-effect.waves-light:active {
+        background-color: #1976d2;
+        box-shadow: 0 2px 8px rgba(33,150,243,0.2);
+    }
+
+    /* Dark mode toggle button enhancement */
+    body.dark-mode .toggle-mode .btn-flat {
+        color: #fff;
+        background-color: rgba(255,255,255,0.05);
+    }
+
+    body.dark-mode .toggle-mode .btn-flat:hover {
+        background-color: rgba(255,255,255,0.1);
+    }
+
+    body {
+      transition: background-color 0.3s ease, color 0.3s ease;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    .card {
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      background-color: #fff;
+    }
+
+    body.dark-mode .card {
+      background-color: #2d2d2d;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 4px 8px rgba(255,255,255,0.1);
+    }
+
+    .pin-container {
+      max-width: 400px;  /* Increased from 360px */
+      margin: 80px auto; /* Reduced from 100px for better vertical centering */
+      text-align: center;
+    }
+
+    .pin-inputs {
+      display: flex;
+      justify-content: space-between;
+      margin: 20px 0;
+      padding: 10px;
+      border-radius: 12px;
+      transition: box-shadow 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    body.dark-mode .pin-inputs {
+      box-shadow: 0 4px 12px rgba(255,255,255,0.05);
+    }
+
+    .pin-inputs:hover, .pin-inputs:focus-within {
+      box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+    }
+
+    body.dark-mode .pin-inputs:hover, body.dark-mode .pin-inputs:focus-within {
+      box-shadow: 0 6px 16px rgba(255,255,255,0.1);
+    }
+
+    .pin-inputs input {
+      width: 52px;      /* Increased from 45px */
+      height: 62px;     /* Increased from 55px */
+      font-size: 28px;  /* Increased from 24px */
+      text-align: center;
+      margin: 0 6px;    /* Increased from 4px */
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      background-color: white;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .pin-inputs input:focus {
+      border-color: #2196f3;
+      box-shadow: 0 0 0 2px rgba(33,150,243,0.2);
+      outline: none;
+    }
+
+    body.dark-mode .pin-inputs input {
+      background-color: #1e1e1e;
+      border-color: #404040;
+      color: #fff;
+    }
+
+    body.dark-mode .pin-inputs input:focus {
+      border-color: #64b5f6;
+      box-shadow: 0 0 0 2px rgba(33,150,243,0.2);
+    }
+
+    .error-message {
+      margin: 16px 0;
+      padding: 8px;
+      border-radius: 8px;
+      background-color: rgba(244,67,54,0.1);
+      color: #f44336;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+      display: none;
+    }
+
+    .error-message.visible {
+      opacity: 1;
+      transform: translateY(0);
+      display: block;
+    }
+
+    body.dark-mode .error-message {
+      background-color: rgba(244,67,54,0.15);
+      color: #ef5350;
+    }
+
+    .toggle-mode {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+    }
+
+    .toggle-mode .btn-flat {
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s ease;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    body.dark-mode .toggle-mode .btn-flat {
+      color: #fff;
+      background-color: #2d2d2d;
+      box-shadow: 0 2px 4px rgba(255,255,255,0.1);
+    }
+
+    .toggle-mode .btn-flat:hover {
+      background-color: rgba(158,158,158,0.2);
+    }
+
+    .btn.waves-effect {
+      transition: opacity 0.3s ease, background-color 0.3s ease;
+      background-color: #2196f3;
+    }
+
+    body.dark-mode .btn.waves-effect {
+      background-color: #64b5f6;
+    }
+
+    .btn.waves-effect:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 480px) {
+      .pin-container {
+        max-width: 340px; /* Increased from 300px */
+      }
+      .pin-inputs input {
+        width: 45px;
+        height: 55px;
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body class="grey lighten-4">
+  <div class="toggle-mode">
+    <button class="btn-flat" onclick="toggleDarkMode()" aria-label="Toggle dark mode">
+      <i class="material-icons">brightness_4</i>
+    </button>
+  </div>
+
+  <div class="pin-container">
+    <div class="card z-depth-3">
+      <div class="card-content">
+        <span class="card-title">Enter PIN</span>
+        <div class="pin-inputs" role="group" aria-label="Enter 6-digit PIN">
+          <input type="text" maxlength="1" inputmode="numeric" class="pin" aria-label="PIN digit 1" />
+          <input type="text" maxlength="1" inputmode="numeric" class="pin" aria-label="PIN digit 2" />
+          <input type="text" maxlength="1" inputmode="numeric" class="pin" aria-label="PIN digit 3" />
+          <input type="text" maxlength="1" inputmode="numeric" class="pin" aria-label="PIN digit 4" />
+          <input type="text" maxlength="1" inputmode="numeric" class="pin" aria-label="PIN digit 5" />
+          <input type="text" maxlength="1" inputmode="numeric" class="pin" aria-label="PIN digit 6" />
+        </div>
+        <button class="btn waves-effect waves-light blue" onclick="verifyPin()">Unlock</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script>
+    const pinBoxes = document.querySelectorAll('.pin');
+    const errorMessage = document.getElementById('errorMessage');
+    const unlockButton = document.querySelector('.btn');
+
+    pinBoxes.forEach((input, index) => {
+      input.addEventListener('input', (e) => {
+        const value = e.target.value.replace(/\D/g, '');
+        e.target.value = value;
+        if (value && index < pinBoxes.length - 1) {
+          pinBoxes[index + 1].focus();
+        }
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !e.target.value && index > 0) {
+          pinBoxes[index - 1].focus();
+        } else if (e.key === 'ArrowLeft' && index > 0) {
+          pinBoxes[index - 1].focus();
+        } else if (e.key === 'ArrowRight' && index < pinBoxes.length - 1) {
+          pinBoxes[index + 1].focus();
+        } else if (e.key === 'Enter') {
+          verifyPin();
+        }
+      });
+
+      input.addEventListener('paste', (e) => {
+        const paste = e.clipboardData.getData('text').replace(/\D/g, '');
+        if (paste.length !== 6) {
+          showError('Please paste a 6-digit PIN');
+          e.preventDefault();
+          return;
+        }
+        for (let i = 0; i < paste.length; i++) {
+          pinBoxes[i].value = paste[i];
+        }
+        verifyPin();
+        e.preventDefault();
+      });
+    });
+
+    function getPin() {
+      return Array.from(pinBoxes).map(input => input.value).join('');
+    }
+
+    function showError(message = 'Invalid PIN. Please try again.') {
+        M.toast({
+            html: `<i class="material-icons left">error_outline</i>${message}`,
+            classes: 'red darken-2 rounded',
+            displayLength: 3000
+        });
+    }
+
+    async function verifyPin() {
+      const pin = getPin();
+      if (pin.length !== 6) {
+        showError('Please enter a 6-digit PIN');
+        return;
+      }
+
+      unlockButton.disabled = true;
+      unlockButton.innerHTML = `
+          <div class="preloader-wrapper small active" style="width: 22px; height: 22px; margin-right: 8px; vertical-align: middle;">
+              <div class="spinner-layer spinner-white-only">
+                  <div class="circle-clipper left"><div class="circle"></div></div>
+                  <div class="gap-patch"><div class="circle"></div></div>
+                  <div class="circle-clipper right"><div class="circle"></div></div>
+              </div>
+          </div>
+          Verifying...
+      `;
+
+      try {
+        const response = await fetch('/verify-pin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ pin })
+        });
+
+        if (response.ok) {
+          window.location.href = '/';
+        } else {
+          const errorData = await response.json();
+          showError(errorData.message || 'Invalid PIN. Please try again.');
+          pinBoxes.forEach(input => input.value = '');
+          pinBoxes[0].focus();
+        }
+      } catch (err) {
+        console.error('Verification error:', err);
+        showError('Network error. Please try again.');
+      } finally {
+        unlockButton.disabled = false;
+        unlockButton.textContent = 'Unlock';
+      }
+    }
+
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        if (document.body.classList.contains('dark-mode')) {
+            document.body.classList.remove('grey', 'lighten-4');
+            document.body.classList.add('grey', 'darken-4');
+        } else {
+            document.body.classList.remove('grey', 'darken-4');
+            document.body.classList.add('grey', 'lighten-4');
+        }
+        
+        const isDark = document.body.classList.contains('dark-mode');
+        localStorage.setItem('darkMode', isDark);
+        document.querySelector('.toggle-mode .material-icons').textContent = 
+            isDark ? 'brightness_7' : 'brightness_4';
+    }
+
+    window.onload = () => {
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+            document.body.classList.remove('grey', 'lighten-4');
+            document.body.classList.add('grey', 'darken-4');
+            document.querySelector('.toggle-mode .material-icons').textContent = 'brightness_7';
+        } else {
+            document.querySelector('.toggle-mode .material-icons').textContent = 'brightness_4';
+        }
+        pinBoxes[0].focus();
+    };
+  </script>
+</body>
+</html>

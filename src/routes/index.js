@@ -7,6 +7,7 @@ const path = require('path');
 const fileManager = require('../utils/fileManager');
 const fs = require('fs');
 const archiver = require('archiver'); // Add this line
+const { PIN_CODE, AUTH_COOKIE_NAME, COOKIE_MAX_AGE } = require('../config/auth');
 
 // Configure multer for optimized uploads
 const storage = multer.diskStorage({
@@ -28,6 +29,26 @@ const upload = multer({
     highWaterMark: 64 * 1024 // Increase buffer size to 64KB
 }).single('file');
 
+// Auth routes
+router.get('/auth', (req, res) => {
+    res.render('auth');
+});
+
+router.post('/verify-pin', (req, res) => {
+    const { pin } = req.body;
+    
+    if (pin === PIN_CODE) {
+        res.cookie(AUTH_COOKIE_NAME, PIN_CODE, {
+            maxAge: COOKIE_MAX_AGE,
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production'
+        });
+        res.json({ success: true });
+    } else {
+        res.status(401).json({ success: false });
+    }
+});
+
 // Routes
 router.get('/', async (req, res) => {
     const files = await fileManager.listFiles();
@@ -37,7 +58,7 @@ router.get('/', async (req, res) => {
 // Optimized upload route
 router.post('/upload', (req, res) => {
     // Set TCP_NODELAY to true for better streaming performance
-    req.socket.setNoDelay(true);
+    req.socket.setNoDelay(true); 
     
     upload(req, res, function(err) {
         if (err instanceof multer.MulterError) {
