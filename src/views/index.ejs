@@ -283,34 +283,60 @@
 
       // Bulk actions handlers
       document.getElementById('bulk-download').addEventListener('click', async () => {
-        // Create a delay between downloads to prevent browser blocking
-        const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
-        
-        // Convert Set to Array for easier async handling
-        const fileIds = Array.from(selectedFiles);
-        
-        for (let i = 0; i < fileIds.length; i++) {
-          // Create hidden iframe for each download to avoid browser blocking
-          const iframe = document.createElement('iframe');
-          iframe.style.display = 'none';
-          document.body.appendChild(iframe);
-          
-          // Set iframe source to download URL
-          iframe.src = `/download/${fileIds[i]}`;
-          
-          // Wait 500ms between downloads
-          await delay(500);
-          
-          // Remove iframe after download starts
-          setTimeout(() => iframe.remove(), 2000);
-        }
-        
-        // Show success message
-        M.toast({
-          html: `Downloading ${fileIds.length} files...`,
-          classes: 'blue'
-        });
+  const fileIds = Array.from(selectedFiles);
+  
+  // Create and show loading toast with white spinner
+  const loadingToast = M.toast({
+    html: `
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <div class="preloader-wrapper small active" style="width: 20px; height: 20px;">
+          <div class="spinner-layer" style="border-color: #ffffff;">
+            <div class="circle-clipper left"><div class="circle"></div></div>
+            <div class="gap-patch"><div class="circle"></div></div>
+            <div class="circle-clipper right"><div class="circle"></div></div>
+          </div>
+        </div>
+        <span style="color: #ffffff;">Zipping ${fileIds.length} files...</span>
+      </div>
+    `,
+    displayLength: Infinity,
+    classes: 'blue darken-3'
+  });
+  
+  try {
+    const response = await fetch('/download-bulk', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ fileIds })
+    });
+    
+    // Dismiss the loading toast
+    loadingToast.dismiss();
+    
+    if (response.ok) {
+      window.location.href = '/download-bulk-zip';
+      M.toast({
+        html: 'Download starting...',
+        classes: 'green'
       });
+    } else {
+      throw new Error('Failed to prepare files');
+    }
+  } catch (error) {
+    // Dismiss the loading toast on error
+    loadingToast.dismiss();
+    
+    console.error('Download error:', error);
+    M.toast({
+      html: 'Failed to download files',
+      classes: 'red'
+    });
+  } finally {
+    exitSelectionMode();
+  }
+});
 
       document.getElementById('bulk-delete').addEventListener('click', async () => {
         if (confirm(`Delete ${selectedFiles.size} selected files?`)) {
@@ -326,7 +352,7 @@
         e.stopPropagation();
       }
 
-      function highlight(e) {
+      function highlight(e) { 
         dropZone.classList.add('drag-over');
         dropMessage.style.display = 'block';
       }
