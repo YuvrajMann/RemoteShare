@@ -90,6 +90,23 @@
         <% } %>
       </div>
 
+      <!-- Add after your files-list div -->
+      <div class="selection-mode-indicator">
+        <span>Selection Mode Active</span>
+      </div>
+
+      <div class="bulk-actions">
+  <button class="btn-small modern-btn blue lighten-5 blue-text text-darken-2" id="bulk-download">
+    <i class="material-icons left">download</i>
+  </button>
+  <button class="btn-small modern-btn red lighten-5 red-text text-darken-2" id="bulk-delete">
+    <i class="material-icons left">delete</i>
+  </button>
+  <button class="btn-small modern-btn grey lighten-4 grey-text text-darken-3" id="bulk-cancel">
+    <i class="material-icons left">close</i>
+  </button>
+</div>
+
       <!-- Progress bar template (hidden) -->
       <template id="progress-bar-template">
         <div class="progress-container" style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
@@ -197,6 +214,112 @@
         qrModalInstance.open();
       });
       qrModalClose.addEventListener('click', () => qrModalInstance.close());
+
+      // Replace the existing selection handling code
+      let isSelectionMode = false;
+      const selectedFiles = new Set();
+
+      // Initialize selection handling
+      document.querySelector('.files-list').addEventListener('click', (e) => {
+        const fileItem = e.target.closest('.file-item');
+        if (!fileItem) return;
+
+        if (isSelectionMode) {
+          toggleFileSelection(fileItem);
+        }
+      });
+
+      document.querySelector('.files-list').addEventListener('dblclick', (e) => {
+        const fileItem = e.target.closest('.file-item');
+        if (!fileItem) return;
+
+        if (!isSelectionMode) {
+          enterSelectionMode();
+          toggleFileSelection(fileItem);
+        }
+      });
+
+      function enterSelectionMode() {
+        isSelectionMode = true;
+        document.querySelector('.selection-mode-indicator').classList.add('active');
+        document.querySelector('.bulk-actions').classList.add('active');
+        // Add subtle indicator that selection mode is active
+
+      }
+
+      function exitSelectionMode() {
+        isSelectionMode = false;
+        selectedFiles.clear();
+        document.querySelectorAll('.file-item.selected').forEach(item => {
+          item.classList.remove('selected');
+        });
+        document.querySelector('.selection-mode-indicator').classList.remove('active');
+        document.querySelector('.bulk-actions').classList.remove('active');
+      }
+
+      function toggleFileSelection(fileItem) {
+        if (!fileItem.dataset.fileId) return;
+        
+        const fileId = fileItem.dataset.fileId;
+        if (selectedFiles.has(fileId)) {
+          selectedFiles.delete(fileId);
+          fileItem.classList.remove('selected');
+        } else {
+          selectedFiles.add(fileId);
+          fileItem.classList.add('selected');
+        }
+        
+        updateBulkActionsVisibility();
+      }
+
+      function updateBulkActionsVisibility() {
+        const hasSelection = selectedFiles.size > 0;
+        document.getElementById('bulk-download').style.display = hasSelection ? 'block' : 'none';
+        document.getElementById('bulk-delete').style.display = hasSelection ? 'block' : 'none';
+      }
+
+      // Cancel selection mode
+      document.getElementById('bulk-cancel').addEventListener('click', exitSelectionMode);
+
+      // Bulk actions handlers
+      document.getElementById('bulk-download').addEventListener('click', async () => {
+        // Create a delay between downloads to prevent browser blocking
+        const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+        
+        // Convert Set to Array for easier async handling
+        const fileIds = Array.from(selectedFiles);
+        
+        for (let i = 0; i < fileIds.length; i++) {
+          // Create hidden iframe for each download to avoid browser blocking
+          const iframe = document.createElement('iframe');
+          iframe.style.display = 'none';
+          document.body.appendChild(iframe);
+          
+          // Set iframe source to download URL
+          iframe.src = `/download/${fileIds[i]}`;
+          
+          // Wait 500ms between downloads
+          await delay(500);
+          
+          // Remove iframe after download starts
+          setTimeout(() => iframe.remove(), 2000);
+        }
+        
+        // Show success message
+        M.toast({
+          html: `Downloading ${fileIds.length} files...`,
+          classes: 'blue'
+        });
+      });
+
+      document.getElementById('bulk-delete').addEventListener('click', async () => {
+        if (confirm(`Delete ${selectedFiles.size} selected files?`)) {
+          for (const fileId of selectedFiles) {
+            await fetch(`/file/${fileId}`, { method: 'DELETE' });
+          }
+          window.location.reload();
+        }
+      });
 
       function preventDefaults(e) {
         e.preventDefault();
