@@ -1,76 +1,122 @@
+const express = require('express');
 const cluster = require('cluster');
-const numCPUs = require('os').cpus().length;
+const os = require('os');
+const http = require('http');
+const socketIO = require('socket.io');
+const path = require('path');
+const compression = require('compression');
+const session = require('express-session');
+require('dotenv').config();
+
+const numCPUs = os.cpus().length;
+
+// Helper function to get local network IP address
+function getLocalNetworkIP() {
+    const interfaces = os.networkInterfaces();
+    for (const name of Object.keys(interfaces)) {
+        for (const iface of interfaces[name]) {
+            // Skip internal (loopback) and non-IPv4 addresses
+            if (iface.family === 'IPv4' && !iface.internal) {
+                return iface.address;
+            }
+        }
+    }
+    return '0.0.0.0';
+}
 
 if (cluster.isMaster) {
-    // Fork workers for parallel processing
+    console.log(`Master ${process.pid} is running`);
+    console.log(`Forking ${numCPUs} workers...`);
+
     for (let i = 0; i < numCPUs; i++) {
         cluster.fork();
     }
-} else {
-    // Your existing app code
-    const express = require('express');
-    const app = express();
-    const os = require('os');
-    const archiver = require('archiver');
-    const fs = require('fs');
-    const path = require('path');
-    const cookieParser = require('cookie-parser');
-    const authMiddleware = require('./middleware/auth');
 
-    // Increase payload limits (10GB)
-    app.use(express.json({limit: '10240mb'})); 
-    app.use(express.urlencoded({
-        extended: true, 
-        limit: '10240mb',
-        parameterLimit: 1000000
+    cluster.on('exit', (worker, code, signal) => {
+        console.log(`Worker ${worker.process.pid} died. Forking a new one...`);
+        cluster.fork();
+    });
+} else {
+    const app = express();
+    const server = http.createServer(app);
+    const io = socketIO(server);
+
+    // Increase timeouts for large file transfers
+    server.timeout = 0; // Disable timeout (or set very high like 3600000 for 1 hour)
+    server.keepAliveTimeout = 300000; // 5 minutes
+    server.headersTimeout = 300000; // 5 minutes
+    
+    // Increase max listeners to prevent memory leak warnings
+    server.setMaxListeners(0);
+
+    // ============ MIDDLEWARE ORDER IS CRITICAL ============
+    
+    // 1. Body parsers FIRST
+    app.use(express.json());
+    app.use(express.urlencoded({ extended: true }));
+
+    // 2. Compression
+    app.use(compression());
+
+    // 3. Static files BEFORE session (so CSS/JS/images load without auth)
+    app.use(express.static(path.join(__dirname, '../public')));
+    app.use('/css', express.static(path.join(__dirname, 'public/css')));
+    app.use('/js', express.static(path.join(__dirname, 'public/js')));
+    app.use('/images', express.static(path.join(__dirname, 'public/images')));
+
+    // 4. Session middleware
+    app.use(session({
+        secret: process.env.SESSION_SECRET || 'remoteshare-secret-key-change-in-production',
+        resave: false,
+        saveUninitialized: false,
+        name: 'remoteshare.sid',
+        cookie: { 
+            secure: false,
+            httpOnly: true,
+            maxAge: 24 * 60 * 60 * 1000,
+            sameSite: 'lax'
+        }
     }));
 
-    // Memory management for large files
-    const memoryLimit = '12gb'; // Set Node.js memory limit higher than upload size
-    process.env.NODE_OPTIONS = `--max-old-space-size=${parseInt(memoryLimit)}`;
-
-    // Configure EJS as view engine
-    app.set('view engine', 'ejs');
-    app.set('views', path.join(__dirname, 'views'));
-
-    // Middleware
-    app.use(cookieParser());
-    app.use(express.json());
-    app.use(authMiddleware);
-    app.use(express.urlencoded({ extended: true }));
-    //serve static files from the public directory
-    app.use(express.static(path.join(__dirname, 'public')));
-    // Optimize for large file transfers
+    // 5. Debug middleware
     app.use((req, res, next) => {
-        if (req.url.startsWith('/upload')) {
-            req.socket.setNoDelay(true);
-            req.socket.setTimeout(30 * 60 * 1000); // 30 minutes timeout
+        console.log(`${req.method} ${req.path}`);
+        if (!req.path.match(/\.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$/)) {
+            console.log('Session ID:', req.sessionID);
+            console.log('Authenticated:', req.session?.authenticated || false);
         }
         next();
     });
 
-    // Routes
+    // 6. View engine
+    app.set('view engine', 'ejs');
+    app.set('views', path.join(__dirname, 'views'));
+
+    // 7. Routes
     const routes = require('./routes');
     app.use('/', routes);
 
-    const PORT = process.env.PORT || 3000;
-    const HOST = '0.0.0.0'; // Allow connections from all network interfaces
-
-    app.listen(PORT, HOST, () => {
-        const networkInterfaces = os.networkInterfaces();
-        console.log('\nServer is running on:');
+    // 8. Socket.IO
+    io.on('connection', (socket) => {
+        console.log('Client connected:', socket.id);
         
-        Object.keys(networkInterfaces).forEach((interfaceName) => {
-            networkInterfaces[interfaceName].forEach((interface) => {
-                if (interface.family === 'IPv4' && !interface.internal) {
-                    console.log(`  http://${interface.address}:${PORT}`);
-                }
-            });
+        socket.on('media-control', (data) => {
+            socket.broadcast.emit('media-control', data);
         });
-        
-        console.log('\nShare these URLs with devices on your network to access RemoteShare');
-        console.log('Press Ctrl+C to stop the server');
+
+        socket.on('disconnect', () => {
+            console.log('Client disconnected:', socket.id);
+        });
     });
 
-    module.exports = app;
+    const PORT = process.env.PORT || 3000;
+    server.listen(PORT, '0.0.0.0', () => {
+        const networkIP = getLocalNetworkIP();
+        console.log(`\n${'='.repeat(60)}`);
+        console.log(`✓ Worker ${process.pid} is running`);
+        console.log(`\n  Local:            http://localhost:${PORT}`);
+        console.log(`  Network:          http://${networkIP}:${PORT}`);
+        console.log(`\n  Listening on:     0.0.0.0:${PORT}`);
+        console.log(`${'='.repeat(60)}\n`);
+    });
 }

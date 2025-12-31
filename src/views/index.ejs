@@ -8,6 +8,219 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
   <link rel="stylesheet" href="/css/styles.css">
   <link rel="icon" type="image/x-icon" href="/favicon.png">
+  <style>
+/* Modern modal styling for media preview */
+#mediaPreviewModal.modal {
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 8px 32px rgba(44,62,80,0.18), 0 1.5px 6px rgba(33,150,243,0.08);
+  max-width: 90vw;
+  max-height: 90vh;
+  min-width: 320px;
+  padding: 0;
+  overflow: hidden;
+}
+
+body.dark-mode #mediaPreviewModal.modal {
+  background: #23272e;
+  color: #f0f0f0;
+  box-shadow: 0 8px 32px rgba(33,150,243,0.10), 0 1.5px 6px rgba(0,0,0,0.18);
+}
+
+#mediaPreviewModal .modal-content {
+  padding: 2rem;
+  border-radius: 18px;
+  background: inherit;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+#mediaPreviewModal .close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  background: rgba(0,0,0,0.5);
+  color: white;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+#mediaPreviewModal .close-btn:hover {
+  background: rgba(0,0,0,0.7);
+  transform: scale(1.1);
+}
+
+#mediaPreviewModal h5#mediaTitle {
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #1976d2;
+  letter-spacing: 0.01em;
+  text-align: center;
+  padding-right: 40px;
+  word-break: break-word;
+}
+
+body.dark-mode #mediaPreviewModal h5#mediaTitle {
+  color: #90caf9;
+}
+
+#mediaPreviewModal video,
+#mediaPreviewModal audio {
+  margin: 0 auto 1.2rem auto;
+  display: block;
+  border-radius: 10px;
+  background: #000;
+  box-shadow: 0 2px 12px rgba(33,150,243,0.15);
+  width: 100%;
+  max-width: 100%;
+  max-height: 70vh;
+}
+
+#mediaPreviewModal img {
+  margin: 0 auto;
+  display: block;
+  border-radius: 10px;
+  max-width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+  box-shadow: 0 2px 12px rgba(33,150,243,0.15);
+}
+
+#mediaPreviewModal iframe {
+  width: 100%;
+  height: 75vh;
+  border: none;
+  border-radius: 10px;
+  background: white;
+  box-shadow: 0 2px 12px rgba(33,150,243,0.15);
+}
+
+body.dark-mode #mediaPreviewModal iframe {
+  background: #1a1d22;
+}
+
+#mediaPreviewModal .media-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+#mediaPreviewModal .unsupported-message {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #666;
+}
+
+body.dark-mode #mediaPreviewModal .unsupported-message {
+  color: #aaa;
+}
+
+#mediaPreviewModal .unsupported-message i {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+#mediaPreviewModal .download-original {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  #mediaPreviewModal .modal-content {
+    padding: 1rem;
+  }
+  #mediaPreviewModal.modal {
+    min-width: 0;
+    width: 95vw;
+    max-width: 95vw;
+  }
+  #mediaPreviewModal video,
+  #mediaPreviewModal audio,
+  #mediaPreviewModal img {
+    max-height: 60vh;
+  }
+  #mediaPreviewModal iframe {
+    height: 65vh;
+  }
+}
+
+/* Keep existing styles for other sections */
+.share-url-input.copied {
+    background-color: #e8f5e9 !important;
+    transition: background-color 0.3s ease;
+}
+
+body.dark-mode .share-url-input.copied {
+    background-color: #1b5e20 !important;
+}
+
+.copy-btn {
+    transition: all 0.2s ease;
+}
+
+.copy-btn:active {
+    transform: scale(0.95);
+}
+
+/* Enhanced logout button styling */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.action-divider {
+    width: 1px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 0 8px;
+}
+
+body.dark-mode .action-divider {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+#logout-btn.theme-toggle-btn {
+    background: rgba(244, 67, 54, 0.1);
+    border: 1px solid rgba(244, 67, 54, 0.2);
+    transition: all 0.3s ease;
+}
+
+#logout-btn.theme-toggle-btn:hover {
+    background: rgba(244, 67, 54, 0.2);
+    border-color: rgba(244, 67, 54, 0.4);
+    transform: translateY(-2px);
+}
+
+#logout-btn.theme-toggle-btn i {
+    color: #f44336;
+}
+
+body.dark-mode #logout-btn.theme-toggle-btn {
+    background: rgba(244, 67, 54, 0.15);
+    border-color: rgba(244, 67, 54, 0.3);
+}
+
+body.dark-mode #logout-btn.theme-toggle-btn:hover {
+    background: rgba(244, 67, 54, 0.25);
+    border-color: rgba(244, 67, 54, 0.5);
+}
+
+body.dark-mode #logout-btn.theme-toggle-btn i {
+    color: #ef5350;
+}
+  </style>
 </head>
 
 <body>
@@ -17,12 +230,16 @@
         <i class="material-icons">folder_shared</i>
         Remote Share
       </div>
-      <div style="display: flex; align-items: center;">
-        <button id="theme-toggle" class="theme-toggle-btn">
+      <div class="header-actions">
+        <button id="theme-toggle" class="theme-toggle-btn" title="Toggle Theme">
           <i id="theme-icon" class="material-icons">dark_mode</i>
         </button>
-        <button id="qr-toggle" class="theme-toggle-btn" style="margin-left: 12px;">
+        <button id="qr-toggle" class="theme-toggle-btn" title="Show QR Code">
           <i class="material-icons">qr_code</i>
+        </button>
+        <div class="action-divider"></div>
+        <button id="logout-btn" class="theme-toggle-btn" title="Logout">
+          <i class="material-icons">logout</i>
         </button>
       </div>
     </div>
@@ -61,10 +278,10 @@
 
       <div class="files-list">
         <% if (files && files.length > 0) { %>
-        <% files.reverse().forEach(file => { console.log(file) %>
+        <% files.reverse().forEach(file => { %>
         <div class="file-item" data-file-id="<%= file.id %>">
           <div class="file-info">
-            <i class="material-icons">insert_drive_file</i>
+            <i class="material-icons file-type-icon" data-filename="<%= file.name %>">insert_drive_file</i>
             <div class="file-details">
               <span class="filename-text"><%= file.name %></span>
               <div class="file-metadata">
@@ -79,6 +296,12 @@
             <a class="btn-floating waves-effect waves-light red" onclick="deleteFile(this)" title="Delete">
               <i class="material-icons">delete</i>
             </a>
+            <% if (/\.(mp4|webm|ogg|mov|mkv|avi|mp3|wav|m4a|aac|flac|pdf|png|jpg|jpeg|gif|svg|webp|bmp|txt|log|md|json|xml|csv|html|css|js|py|java|c|cpp|h|php|rb|go|rs|ts|sh|bat|yaml|yml|conf|ini|doc|docx|xls|xlsx)$/i.test(file.name)) { %>
+            <a class="btn-floating waves-effect waves-light green" title="Preview"
+               onclick="previewMedia('<%= file.id %>', '<%= file.name %>')">
+              <i class="material-icons">visibility</i>
+            </a>
+            <% } %>
           </div>
         </div>
         <% }) %>
@@ -142,10 +365,416 @@
     </div>
   </div>
 
+  <!-- Modal for Media Preview -->
+  <div id="mediaPreviewModal" class="modal">
+    <div class="modal-content">
+      <div class="close-btn" onclick="closeMediaPreview()">
+        <i class="material-icons">close</i>
+      </div>
+      <h5 id="mediaTitle"></h5>
+      <div class="media-container" id="mediaContainer">
+        <!-- Media content will be dynamically inserted here -->
+      </div>
+      <div class="download-original">
+        <button class="btn waves-effect waves-light blue" id="downloadOriginalBtn" style="display:none;">
+          <i class="material-icons left">download</i>Download Original
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
-  <script>
+
+<script>
+// Global variables for media preview
+let mediaPreviewModal;
+
+// Function to preview media files
+function previewMedia(fileId, fileName) {
+    try {
+        console.log('Opening preview for:', fileId, fileName);
+        
+        // Initialize modal if not already done
+        const modalElem = document.getElementById('mediaPreviewModal');
+        if (!mediaPreviewModal) {
+            mediaPreviewModal = M.Modal.init(modalElem, {
+                dismissible: true,
+                opacity: 0.5,
+                inDuration: 300,
+                outDuration: 200,
+                onCloseEnd: function() {
+                    // Clean up media elements when modal closes
+                    const container = document.getElementById('mediaContainer');
+                    container.innerHTML = '';
+                }
+            });
+        }
+        
+        // Set title
+        document.getElementById('mediaTitle').textContent = fileName;
+        
+        // Get file extension
+        const ext = fileName.split('.').pop().toLowerCase();
+        
+        // Get container
+        const container = document.getElementById('mediaContainer');
+        container.innerHTML = '';
+        
+        // Setup download button
+        const downloadBtn = document.getElementById('downloadOriginalBtn');
+        downloadBtn.style.display = 'block';
+        downloadBtn.onclick = () => {
+            window.location.href = `/download/${fileId}`;
+        };
+        
+        // Determine media type and create appropriate element
+        if (['mp4', 'webm', 'ogg', 'mov', 'mkv', 'avi'].includes(ext)) {
+            // Video
+            const video = document.createElement('video');
+            video.controls = true;
+            video.autoplay = false;
+            video.src = `/preview/${fileId}`;
+            video.style.width = '100%';
+            video.style.maxHeight = '70vh';
+            container.appendChild(video);
+            
+        } else if (['mp3', 'wav', 'm4a', 'aac', 'flac'].includes(ext)) {
+            // Audio
+            const audio = document.createElement('audio');
+            audio.controls = true;
+            audio.autoplay = false;
+            audio.src = `/preview/${fileId}`;
+            audio.style.width = '100%';
+            container.appendChild(audio);
+            
+        } else if (['png', 'jpg', 'jpeg', 'gif', 'svg', 'webp', 'bmp'].includes(ext)) {
+            // Image
+            const img = document.createElement('img');
+            img.src = `/preview/${fileId}`;
+            img.alt = fileName;
+            img.style.maxWidth = '100%';
+            img.style.maxHeight = '70vh';
+            img.style.objectFit = 'contain';
+            container.appendChild(img);
+            
+        } else if (ext === 'pdf') {
+            // PDF - Enhanced viewer with preview endpoint
+            const pdfWrapper = document.createElement('div');
+            pdfWrapper.style.width = '100%';
+            pdfWrapper.style.height = '75vh';
+            pdfWrapper.style.position = 'relative';
+            pdfWrapper.style.background = '#525659';
+            pdfWrapper.style.borderRadius = '10px';
+            pdfWrapper.style.overflow = 'hidden';
+            
+            // Loading indicator
+            const loader = document.createElement('div');
+            loader.innerHTML = `
+                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: #fff;">
+                    <div class="preloader-wrapper active">
+                        <div class="spinner-layer spinner-blue-only">
+                            <div class="circle-clipper left"><div class="circle"></div></div>
+                            <div class="gap-patch"><div class="circle"></div></div>
+                            <div class="circle-clipper right"><div class="circle"></div></div>
+                        </div>
+                    </div>
+                    <p style="margin-top: 20px;">Loading PDF...</p>
+                </div>
+            `;
+            pdfWrapper.appendChild(loader);
+            
+            // Create iframe for PDF using preview endpoint
+            const iframe = document.createElement('iframe');
+            iframe.src = `/preview/${fileId}#toolbar=1&navpanes=1&scrollbar=1&view=FitH`;
+            iframe.type = 'application/pdf';
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+            iframe.style.border = 'none';
+            iframe.style.display = 'none';
+            
+            // Handle iframe load
+            iframe.onload = () => {
+                loader.style.display = 'none';
+                iframe.style.display = 'block';
+            };
+            
+            // Handle iframe error
+            iframe.onerror = () => {
+                loader.style.display = 'none';
+                pdfWrapper.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: #fff;">
+                        <i class="material-icons" style="font-size: 4rem; opacity: 0.7;">picture_as_pdf</i>
+                        <p style="margin-top: 1rem; font-size: 1.1rem;">Unable to display PDF in browser</p>
+                        <p style="margin-top: 0.5rem; opacity: 0.8;">Please download the file to view it</p>
+                    </div>
+                `;
+            };
+            
+            pdfWrapper.appendChild(iframe);
+            container.appendChild(pdfWrapper);
+            
+            // Fallback: try to load after a short delay if not loaded
+            setTimeout(() => {
+                if (loader.style.display !== 'none') {
+                    // Try alternative method with object tag using preview endpoint
+                    const object = document.createElement('object');
+                    object.data = `/preview/${fileId}`;
+                    object.type = 'application/pdf';
+                    object.style.width = '100%';
+                    object.style.height = '100%';
+                    object.innerHTML = `
+                        <div style="text-align: center; padding: 3rem; color: #fff;">
+                            <i class="material-icons" style="font-size: 4rem; opacity: 0.7;">picture_as_pdf</i>
+                            <p style="margin-top: 1rem;">Unable to display PDF in browser</p>
+                            <p style="margin-top: 0.5rem; opacity: 0.8;">Your browser may not support inline PDF viewing</p>
+                            <button class="btn blue" onclick="window.open('/preview/${fileId}', '_blank')" style="margin-top: 1rem;">
+                                <i class="material-icons left">open_in_new</i>Open in New Tab
+                            </button>
+                        </div>
+                    `;
+                    pdfWrapper.innerHTML = '';
+                    pdfWrapper.appendChild(object);
+                }
+            }, 3000);
+            
+        } else if (['txt', 'log', 'md', 'json', 'xml', 'csv', 'html', 'css', 'js', 'py', 'java', 'c', 'cpp', 'h', 'hpp', 'php', 'rb', 'go', 'rs', 'ts', 'tsx', 'jsx', 'sh', 'bat', 'yaml', 'yml', 'conf', 'ini', 'env', 'gitignore', 'sql', 'kt', 'swift', 'r', 'scala', 'pl', 'lua', 'dart'].includes(ext)) {
+            // Text/Code files - Enhanced viewer with syntax awareness
+            const textWrapper = document.createElement('div');
+            textWrapper.style.width = '100%';
+            textWrapper.style.maxHeight = '70vh';
+            textWrapper.style.position = 'relative';
+            textWrapper.style.background = '#1e1e1e';
+            textWrapper.style.borderRadius = '10px';
+            textWrapper.style.overflow = 'hidden';
+            textWrapper.style.boxShadow = '0 2px 12px rgba(0,0,0,0.2)';
+            
+            // Loading indicator
+            const loader = document.createElement('div');
+            loader.innerHTML = `
+                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: #fff;">
+                    <div class="preloader-wrapper small active">
+                        <div class="spinner-layer spinner-blue-only">
+                            <div class="circle-clipper left"><div class="circle"></div></div>
+                            <div class="gap-patch"><div class="circle"></div></div>
+                            <div class="circle-clipper right"><div class="circle"></div></div>
+                        </div>
+                    </div>
+                    <p style="margin-top: 20px;">Loading file...</p>
+                </div>
+            `;
+            textWrapper.appendChild(loader);
+            container.appendChild(textWrapper);
+            
+            fetch(`/preview/${fileId}`)
+                .then(res => {
+                    if (!res.ok) throw new Error('Failed to load file');
+                    return res.text();
+                })
+                .then(text => {
+                    loader.remove();
+                    
+                    // Create header with file info
+                    const header = document.createElement('div');
+                    header.style.cssText = `
+                        background: #2d2d30;
+                        padding: 12px 16px;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        border-bottom: 1px solid #3e3e42;
+                        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    `;
+                    
+                    const fileInfo = document.createElement('div');
+                    fileInfo.style.cssText = 'display: flex; align-items: center; gap: 12px; color: #cccccc;';
+                    
+                    const iconMap = {
+                        'js': '{ }', 'jsx': '{ }', 'ts': 'TS', 'tsx': 'TSX',
+                        'py': '🐍', 'java': '☕', 'c': 'C', 'cpp': 'C++', 'h': 'H',
+                        'php': '🐘', 'rb': '💎', 'go': 'Go', 'rs': '🦀',
+                        'html': '</>', 'css': '🎨', 'json': '{ }', 'xml': '</>',
+                        'md': '📝', 'txt': '📄', 'log': '📋', 'sql': '🗃️',
+                        'sh': '$', 'bat': '⚙️', 'yaml': '⚙️', 'yml': '⚙️'
+                    };
+                    
+                    const icon = iconMap[ext] || '📄';
+                    fileInfo.innerHTML = `
+                        <span style="font-size: 18px;">${icon}</span>
+                        <span style="font-weight: 500;">${fileName}</span>
+                        <span style="font-size: 12px; opacity: 0.7;">${text.split('\n').length} lines</span>
+                        <span style="font-size: 12px; opacity: 0.7;">${(new Blob([text]).size / 1024).toFixed(2)} KB</span>
+                    `;
+                    
+                    header.appendChild(fileInfo);
+                    textWrapper.appendChild(header);
+                    
+                    // Create code container with line numbers
+                    const codeContainer = document.createElement('div');
+                    codeContainer.style.cssText = `
+                        display: flex;
+                        overflow: auto;
+                        max-height: calc(70vh - 45px);
+                        background: #1e1e1e;
+                    `;
+                    
+                    // Line numbers
+                    const lineNumbers = document.createElement('div');
+                    lineNumbers.style.cssText = `
+                        background: #1e1e1e;
+                        color: #858585;
+                        padding: 16px 8px;
+                        text-align: right;
+                        user-select: none;
+                        font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+                        font-size: 13px;
+                        line-height: 1.6;
+                        border-right: 1px solid #3e3e42;
+                        min-width: 50px;
+                    `;
+                    
+                    const lines = text.split('\n');
+                    lineNumbers.innerHTML = lines.map((_, i) => 
+                        `<div style="padding: 0 8px;">${i + 1}</div>`
+                    ).join('');
+                    
+                    // Code content
+                    const pre = document.createElement('pre');
+                    pre.style.cssText = `
+                        flex: 1;
+                        margin: 0;
+                        padding: 16px;
+                        background: #1e1e1e;
+                        color: #d4d4d4;
+                        font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+                        font-size: 13px;
+                        line-height: 1.6;
+                        white-space: pre;
+                        word-wrap: normal;
+                        overflow-x: auto;
+                        tab-size: 4;
+                    `;
+                    
+                    // Apply basic syntax highlighting
+                    const highlightedText = applySyntaxHighlighting(text, ext);
+                    pre.innerHTML = highlightedText;
+                    
+                    codeContainer.appendChild(lineNumbers);
+                    codeContainer.appendChild(pre);
+                    textWrapper.appendChild(codeContainer);
+                    
+                    // Sync scrolling between line numbers and code
+                    codeContainer.addEventListener('scroll', () => {
+                        lineNumbers.style.transform = `translateY(-${codeContainer.scrollTop}px)`;
+                    });
+                    
+                    if (document.body.classList.contains('dark-mode')) {
+                        // Already dark, keep it
+                    } else {
+                        // Light mode adjustments
+                        textWrapper.style.background = '#ffffff';
+                        header.style.background = '#f3f3f3';
+                        header.style.borderBottom = '1px solid #e0e0e0';
+                        lineNumbers.style.background = '#f8f8f8';
+                        lineNumbers.style.borderRight = '1px solid #e0e0e0';
+                        lineNumbers.style.color = '#6e7781';
+                        pre.style.background = '#ffffff';
+                        pre.style.color = '#24292f';
+                        codeContainer.style.background = '#ffffff';
+                    }
+                })
+                .catch(err => {
+                    console.error('Failed to load text file:', err);
+                    loader.remove();
+                    textWrapper.innerHTML = `
+                        <div style="text-align: center; padding: 3rem; color: #fff;">
+                            <i class="material-icons" style="font-size: 4rem; opacity: 0.7;">error_outline</i>
+                            <p style="margin-top: 1rem;">Failed to load file</p>
+                            <p style="margin-top: 0.5rem; opacity: 0.8;">The file might be too large or corrupted</p>
+                        </div>
+                    `;
+                });
+                
+        } else if (['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(ext)) {
+            // Microsoft Office files - use Office Online Viewer
+            const iframe = document.createElement('iframe');
+            iframe.src = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(window.location.origin + '/download/' + fileId)}`;
+            iframe.style.width = '100%';
+            iframe.style.height = '75vh';
+            iframe.style.border = 'none';
+            container.appendChild(iframe);
+            
+        } else {
+            // Unsupported file type
+            showUnsupportedMessage(container, fileName);
+        }
+        
+        // Open modal
+        mediaPreviewModal.open();
+        
+    } catch (error) {
+        console.error('Error in previewMedia:', error);
+        M.toast({html: 'Error opening preview', classes: 'red'});
+    }
+}
+
+function showUnsupportedMessage(container, fileName) {
+    const div = document.createElement('div');
+    div.className = 'unsupported-message';
+    div.innerHTML = `
+        <i class="material-icons">info_outline</i>
+        <p><strong>Preview not available</strong></p>
+        <p>This file type cannot be previewed directly.</p>
+        <p>Please download the file to view it.</p>
+        <p style="margin-top: 1rem; color: #999; font-size: 0.9rem;">${fileName}</p>
+    `;
+    container.appendChild(div);
+}
+
+function closeMediaPreview() {
+    if (mediaPreviewModal) {
+        mediaPreviewModal.close();
+    }
+}
+
+
+// Basic syntax highlighting function
+function applySyntaxHighlighting(text, ext) {
+    try {
+        // Escape HTML first
+        text = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        
+        // Define color schemes
+        const colors = {
+            keyword: '#569cd6',
+            string: '#ce9178',
+            comment: '#6a9955',
+            number: '#b5cea8',
+            property: '#9cdcfe'
+        };
+        
+        // Apply basic syntax highlighting
+        if (['js', 'jsx', 'ts', 'tsx', 'java', 'c', 'cpp', 'go', 'php'].includes(ext)) {
+            // C-style languages - comments
+            text = text.replace(/(\/\/.*$)/gm, '<span style="color: ' + colors.comment + '">$1</span>');
+            text = text.replace(/(\/\*[\s\S]*?\*\/)/g, '<span style="color: ' + colors.comment + '">$1</span>');
+            
+        } else if (['py', 'rb'].includes(ext)) {
+            // Python/Ruby - comments
+            text = text.replace(/(#.*$)/gm, '<span style="color: ' + colors.comment + '">$1</span>');
+        }
+        
+        return text;
+    } catch (e) {
+        console.error('Syntax highlighting error:', e);
+        return text;
+    }
+}
+  </script>
+
+<!-- Your existing scripts -->
+<script>
     document.addEventListener('DOMContentLoaded', function() {
       M.AutoInit();
 
@@ -215,7 +844,8 @@
       });
       qrModalClose.addEventListener('click', () => qrModalInstance.close());
 
-      // Replace the existing selection handling code
+      // Initialize file type icons on page load
+      initializeFileIcons();
       let isSelectionMode = false;
       const selectedFiles = new Set();
 
@@ -243,8 +873,6 @@
         isSelectionMode = true;
         document.querySelector('.selection-mode-indicator').classList.add('active');
         document.querySelector('.bulk-actions').classList.add('active');
-        // Add subtle indicator that selection mode is active
-
       }
 
       function exitSelectionMode() {
@@ -285,7 +913,6 @@
       document.getElementById('bulk-download').addEventListener('click', async () => {
   const fileIds = Array.from(selectedFiles);
   
-  // Create and show loading toast with white spinner
   const loadingToast = M.toast({
     html: `
       <div style="display: flex; align-items: center; gap: 10px;">
@@ -312,7 +939,6 @@
       body: JSON.stringify({ fileIds })
     });
     
-    // Dismiss the loading toast
     loadingToast.dismiss();
     
     if (response.ok) {
@@ -325,9 +951,7 @@
       throw new Error('Failed to prepare files');
     }
   } catch (error) {
-    // Dismiss the loading toast on error
     loadingToast.dismiss();
-    
     console.error('Download error:', error);
     M.toast({
       html: 'Failed to download files',
@@ -431,200 +1055,445 @@
       }
     }
 
-    // Add this function in your <script> block
     async function deletePartialFile(filename) {
-      // Call your backend endpoint to delete the partial file by filename
       await fetch(`/file/partial/${encodeURIComponent(filename)}`, {
         method: 'DELETE'
       });
     }
 
-    async function uploadFile(file) {
-      const formData = new FormData();
-      formData.append('file', file);
+    const CHUNK_SIZE = 5 * 1024 * 1024;
 
-      const progressBar = createProgressBar(file.name, file.name); // Pass file.name as originalFileName
-      const progressContainer = document.getElementById('upload-progress-container');
-      progressContainer.style.display = 'block';
+async function uploadFile(file) {
+    if (file.size > 10 * 1024 * 1024) {
+        return await uploadFileInChunks(file);
+    }
+    return await uploadFileNormal(file);
+}
 
-      try {
+async function uploadFileInChunks(file) {
+    const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+    const fileId = `${Date.now()}-${file.name}`;
+    
+    const progressBar = createProgressBar(file.name, file.name);
+    const progressContainer = document.getElementById('upload-progress-container');
+    progressContainer.style.display = 'block';
+    
+    let uploadedBytes = 0;
+    const startTime = Date.now();
+
+    const abortController = new AbortController();
+    progressBar.abortController = abortController;
+
+    const MAX_RETRIES = 3;
+    const RETRY_DELAY = 1000;
+
+    async function uploadChunkWithRetry(chunkIndex, chunk, retries = 0) {
+        try {
+            const formData = new FormData();
+            formData.append('chunk', chunk);
+            formData.append('chunkIndex', chunkIndex);
+            formData.append('totalChunks', totalChunks);
+            formData.append('fileId', fileId);
+            formData.append('fileName', file.name);
+            formData.append('fileSize', file.size);
+
+            console.log(`Uploading chunk ${chunkIndex + 1}/${totalChunks}...`);
+
+            const response = await fetch('/upload-chunk', {
+                method: 'POST',
+                body: formData,
+                signal: abortController.signal
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.error || `Server returned ${response.status}`);
+            }
+
+            const result = await response.json();
+            console.log(`✓ Chunk ${chunkIndex + 1}/${totalChunks} uploaded successfully`);
+            return result;
+
+        } catch (error) {
+            if (error.name === 'AbortError') {
+                throw error;
+            }
+
+            console.error(`❌ Chunk ${chunkIndex + 1} failed:`, error.message);
+
+            if (retries < MAX_RETRIES) {
+                console.log(`Retrying chunk ${chunkIndex + 1}... (Attempt ${retries + 1}/${MAX_RETRIES})`);
+                await new Promise(resolve => setTimeout(resolve, RETRY_DELAY * (retries + 1)));
+                return uploadChunkWithRetry(chunkIndex, chunk, retries + 1);
+            } else {
+                throw new Error(`Chunk ${chunkIndex + 1} upload failed after ${MAX_RETRIES} retries: ${error.message}`);
+            }
+        }
+    }
+
+    try {
+        console.log(`Starting chunked upload: ${file.name} (${totalChunks} chunks)`);
+
+        for (let chunkIndex = 0; chunkIndex < totalChunks; chunkIndex++) {
+            if (abortController.signal.aborted) {
+                throw new Error('Upload cancelled');
+            }
+
+            const start = chunkIndex * CHUNK_SIZE;
+            const end = Math.min(start + CHUNK_SIZE, file.size);
+            const chunk = file.slice(start, end);
+
+            await uploadChunkWithRetry(chunkIndex, chunk);
+
+            uploadedBytes += (end - start);
+            const percentComplete = (uploadedBytes / file.size) * 100;
+            const speed = calculateSpeed(uploadedBytes, Date.now() - startTime);
+            updateProgressBar(progressBar, percentComplete, speed);
+        }
+
+        console.log('✓✓✓ All chunks uploaded successfully!');
+        completeProgressBar(progressBar);
+        await fetchAndReplaceFilesList();
+        M.toast({
+            html: `${getDisplayName(file.name)} uploaded successfully!`,
+            classes: 'green'
+        });
+
+        setTimeout(() => {
+            progressBar.remove();
+            const progressContainer = document.getElementById('upload-progress-container');
+            if (!progressContainer.querySelector('.progress-container')) {
+                progressContainer.style.display = 'none';
+            }
+        }, 2000);
+
+    } catch (error) {
+        console.error('❌ Upload error:', error);
+        
+        if (error.name === 'AbortError' || error.message === 'Upload cancelled') {
+            console.log('Upload cancelled by user');
+            await fetch('/upload-chunk/cancel', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ fileId })
+            });
+            M.toast({
+                html: `Upload cancelled for ${getDisplayName(file.name)}`,
+                classes: 'blue'
+            });
+        } else {
+            errorProgressBar(progressBar);
+            M.toast({
+                html: `Failed to upload ${getDisplayName(file.name)}: ${error.message}`,
+                classes: 'red',
+                displayLength: 5000
+            });
+        }
+        
+        setTimeout(() => {
+            progressBar.remove();
+            const progressContainer = document.getElementById('upload-progress-container');
+            if (!progressContainer.querySelector('.progress-container')) {
+                progressContainer.style.display = 'none';
+            }
+        }, 3000);
+    }
+}
+
+async function uploadFileNormal(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const progressBar = createProgressBar(file.name, file.name);
+    const progressContainer = document.getElementById('upload-progress-container');
+    progressContainer.style.display = 'block';
+
+    try {
         const xhr = new XMLHttpRequest();
-        progressBar.xhr = xhr; // Attach xhr to progressBar for cancel
+        progressBar.xhr = xhr;
 
         xhr.open('POST', '/upload', true);
         const startTime = Date.now();
 
         xhr.upload.onprogress = (e) => {
-          if (e.lengthComputable) {
-            const percentComplete = (e.loaded / e.total) * 100;
-            const speed = calculateSpeed(e.loaded, Date.now() - startTime);
-            updateProgressBar(progressBar, percentComplete, speed);
-          }
+            if (e.lengthComputable) {
+                const percentComplete = (e.loaded / e.total) * 100;
+                const speed = calculateSpeed(e.loaded, Date.now() - startTime);
+                updateProgressBar(progressBar, percentComplete, speed);
+            }
         };
 
         xhr.onload = async function() {
-          if (xhr.status === 200) {
-            try {
-              completeProgressBar(progressBar);
-              await fetchAndReplaceFilesList();
-              M.toast({
-                html: `${getDisplayName(file.name)} uploaded!`,
-                classes: 'green'
-              });
-              setTimeout(() => {
-                progressBar.remove();
-                if (!progressContainer.children.length) {
-                  progressContainer.style.display = 'none';
-                }
-              }, 2000);
-            } catch (error) {
-              errorProgressBar(progressBar);
-              M.toast({
-                html: `Failed to process upload for ${getDisplayName(file.name)}`,
-                classes: 'red'
-              });
+            if (xhr.status === 200) {
+                completeProgressBar(progressBar);
+                await fetchAndReplaceFilesList();
+                M.toast({
+                    html: `${getDisplayName(file.name)} uploaded!`,
+                    classes: 'green'
+                });
+                setTimeout(() => {
+                    progressBar.remove();
+                    if (!progressContainer.children.length) {
+                        progressContainer.style.display = 'none';
+                    }
+                }, 2000);
+            } else {
+                errorProgressBar(progressBar);
+                M.toast({
+                    html: `Failed to upload ${getDisplayName(file.name)}`,
+                    classes: 'red'
+                });
             }
-          } else {
-            errorProgressBar(progressBar);
-            M.toast({
-              html: `Failed to upload ${getDisplayName(file.name)}`,
-              classes: 'red'
-            });
-          }
         };
 
         xhr.onerror = async function() {
-          errorProgressBar(progressBar);
-          await deletePartialFile(file.name);
-          await fetchAndReplaceFilesList();
-          M.toast({
-            html: `Failed to upload ${getDisplayName(file.name)}`,
-            classes: 'red'
-          });
+            errorProgressBar(progressBar);
+            await deletePartialFile(file.name);
+            await fetchAndReplaceFilesList();
+            M.toast({
+                html: `Failed to upload ${getDisplayName(file.name)}`,
+                classes: 'red'
+            });
         };
 
         xhr.send(formData);
-      } catch (error) {
+    } catch (error) {
         errorProgressBar(progressBar);
         await deletePartialFile(file.name);
         await fetchAndReplaceFilesList();
         M.toast({
-          html: `Error uploading ${getDisplayName(file.name)}: ${error.message}`,
-          classes: 'red'
+            html: `Error uploading ${getDisplayName(file.name)}: ${error.message}`,
+            classes: 'red'
         });
-      }
     }
+}
 
-    // Add this helper function for formatting file sizes
-    function formatFileSize(bytes) {
-      if (bytes === 0) return '0 Bytes';
-      const k = 1024;
-      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-      const i = Math.floor(Math.log(bytes) / Math.log(k));
-      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-    }
+function createProgressBar(filename, originalFileName) {
+    const template = document.getElementById('progress-bar-template');
+    const progressBar = template.content.cloneNode(true).children[0];
+    progressBar.querySelector('.filename').textContent = getDisplayName(filename);
 
-    function getDisplayName(filename) {
-      return filename.replace(/^\d+-/, '');
-    }
-
-    function createProgressBar(filename, originalFileName) {
-      const template = document.getElementById('progress-bar-template');
-      const progressBar = template.content.cloneNode(true).children[0];
-      progressBar.querySelector('.filename').textContent = getDisplayName(filename);
-
-      // Attach cancel logic
-      const cancelBtn = progressBar.querySelector('.cancel-upload');
-      cancelBtn.addEventListener('click', async () => {
+    const cancelBtn = progressBar.querySelector('.cancel-upload');
+    cancelBtn.addEventListener('click', async () => {
         if (progressBar.xhr) {
-          progressBar.xhr.abort();
-          await deletePartialFile(originalFileName); // Use the original file name here
-          progressBar.remove();
-          await fetchAndReplaceFilesList();
-          M.toast({
-            html: `Upload cancelled for ${getDisplayName(originalFileName)}`,
-            classes: 'blue'
-          });
+            progressBar.xhr.abort();
+            await deletePartialFile(originalFileName);
+            progressBar.remove();
+            await fetchAndReplaceFilesList();
+            M.toast({
+                html: `Upload cancelled for ${getDisplayName(originalFileName)}`,
+                classes: 'blue'
+            });
+        } else if (progressBar.abortController) {
+            progressBar.abortController.abort();
+            progressBar.remove();
+            M.toast({
+                html: `Upload cancelled for ${getDisplayName(originalFileName)}`,
+                classes: 'blue'
+            });
         }
+    });
+
+    document.getElementById('upload-progress-container').appendChild(progressBar);
+    return progressBar;
+}
+
+function updateProgressBar(progressBar, percentComplete, speed) {
+    const progressBarElem = progressBar.querySelector('.determinate');
+    const progressText = progressBar.querySelector('.progress-text');
+    const speedText = progressBar.querySelector('.upload-speed');
+    
+    if (progressBarElem) progressBarElem.style.width = percentComplete + '%';
+    if (progressText) progressText.textContent = Math.round(percentComplete) + '%';
+    if (speedText) speedText.textContent = speed;
+}
+
+function completeProgressBar(progressBar) {
+    const progressBarElem = progressBar.querySelector('.determinate');
+    const progressText = progressBar.querySelector('.progress-text');
+    const speedText = progressBar.querySelector('.upload-speed');
+    
+    if (progressBarElem) {
+        progressBarElem.style.width = '100%';
+        progressBarElem.classList.add('green');
+    }
+    if (progressText) progressText.textContent = '✓ Complete';
+    if (speedText) speedText.textContent = '';
+    
+    const cancelBtn = progressBar.querySelector('.cancel-upload');
+    if (cancelBtn) cancelBtn.style.display = 'none';
+}
+
+function errorProgressBar(progressBar) {
+    const progressBarElem = progressBar.querySelector('.determinate');
+    const progressText = progressBar.querySelector('.progress-text');
+    const speedText = progressBar.querySelector('.upload-speed');
+    
+    if (progressBarElem) {
+        progressBarElem.classList.add('red');
+    }
+    if (progressText) progressText.textContent = '✗ Failed';
+    if (speedText) speedText.textContent = '';
+}
+
+function getDisplayName(filename) {
+    if (filename.length > 40) {
+        const ext = filename.split('.').pop();
+        return filename.substring(0, 35) + '...' + ext;
+    }
+    return filename;
+}
+
+async function fetchAndReplaceFilesList() {
+    try {
+        const response = await fetch('/files');
+        const data = await response.json();
+        window.location.reload();
+    } catch (error) {
+        console.error('Failed to refresh file list:', error);
+    }
+}
+
+// Function to get file type icon and color based on file extension
+function getFileTypeIcon(fileName) {
+    const ext = fileName.split('.').pop().toLowerCase();
+    
+    const fileTypeMap = {
+        // Documents
+        'pdf': { icon: 'picture_as_pdf', color: '#f44336' },
+        'doc': { icon: 'description', color: '#2196f3' },
+        'docx': { icon: 'description', color: '#2196f3' },
+        'txt': { icon: 'article', color: '#9e9e9e' },
+        'md': { icon: 'article', color: '#333333' },
+        'xls': { icon: 'table_chart', color: '#4caf50' },
+        'xlsx': { icon: 'table_chart', color: '#4caf50' },
+        'csv': { icon: 'table_chart', color: '#4caf50' },
+        'ppt': { icon: 'slideshow', color: '#ff9800' },
+        'pptx': { icon: 'slideshow', color: '#ff9800' },
+        
+        // Images
+        'jpg': { icon: 'image', color: '#9c27b0' },
+        'jpeg': { icon: 'image', color: '#9c27b0' },
+        'png': { icon: 'image', color: '#9c27b0' },
+        'gif': { icon: 'image', color: '#9c27b0' },
+        'svg': { icon: 'image', color: '#9c27b0' },
+        'webp': { icon: 'image', color: '#9c27b0' },
+        'bmp': { icon: 'image', color: '#9c27b0' },
+        
+        // Video
+        'mp4': { icon: 'movie', color: '#e91e63' },
+        'webm': { icon: 'movie', color: '#e91e63' },
+        'ogg': { icon: 'movie', color: '#e91e63' },
+        'mov': { icon: 'movie', color: '#e91e63' },
+        'avi': { icon: 'movie', color: '#e91e63' },
+        'mkv': { icon: 'movie', color: '#e91e63' },
+        
+        // Audio
+        'mp3': { icon: 'music_note', color: '#00bcd4' },
+        'wav': { icon: 'music_note', color: '#00bcd4' },
+        'm4a': { icon: 'music_note', color: '#00bcd4' },
+        'aac': { icon: 'music_note', color: '#00bcd4' },
+        'flac': { icon: 'music_note', color: '#00bcd4' },
+        
+        // Code
+        'js': { icon: 'code', color: '#f7df1e' },
+        'jsx': { icon: 'code', color: '#61dafb' },
+        'ts': { icon: 'code', color: '#3178c6' },
+        'tsx': { icon: 'code', color: '#3178c6' },
+        'py': { icon: 'code', color: '#3776ab' },
+        'java': { icon: 'code', color: '#f89820' },
+        'c': { icon: 'code', color: '#a8b9cc' },
+        'cpp': { icon: 'code', color: '#00599c' },
+        'h': { icon: 'code', color: '#a8b9cc' },
+        'hpp': { icon: 'code', color: '#00599c' },
+        'php': { icon: 'code', color: '#777bb4' },
+        'rb': { icon: 'code', color: '#cc342d' },
+        'go': { icon: 'code', color: '#00add8' },
+        'rs': { icon: 'code', color: '#ce422b' },
+        'html': { icon: 'language', color: '#e34c26' },
+        'css': { icon: 'style', color: '#563d7c' },
+        'json': { icon: 'data_object', color: '#f1e05a' },
+        'xml': { icon: 'data_object', color: '#f89820' },
+        'yaml': { icon: 'settings', color: '#cb171e' },
+        'yml': { icon: 'settings', color: '#cb171e' },
+        'sql': { icon: 'storage', color: '#336791' },
+        'sh': { icon: 'terminal', color: '#4eaa25' },
+        'bat': { icon: 'terminal', color: '#00a4ef' },
+        'log': { icon: 'description', color: '#757575' },
+        'conf': { icon: 'settings', color: '#666666' },
+        'ini': { icon: 'settings', color: '#666666' },
+        
+        // Archives
+        'zip': { icon: 'folder_zip', color: '#f57c00' },
+        'rar': { icon: 'folder_zip', color: '#f57c00' },
+        '7z': { icon: 'folder_zip', color: '#f57c00' },
+        'tar': { icon: 'folder_zip', color: '#f57c00' },
+        'gz': { icon: 'folder_zip', color: '#f57c00' },
+        
+        // Default
+        'default': { icon: 'insert_drive_file', color: '#90a4ae' }
+    };
+    
+    return fileTypeMap[ext] || fileTypeMap['default'];
+}
+
+// Initialize file type icons
+function initializeFileIcons() {
+    const fileIcons = document.querySelectorAll('.file-type-icon');
+    fileIcons.forEach(icon => {
+        const fileName = icon.getAttribute('data-filename');
+        const fileTypeData = getFileTypeIcon(fileName);
+        icon.textContent = fileTypeData.icon;
+        icon.style.color = fileTypeData.color;
+        icon.style.fontSize = '32px';
+        icon.style.transition = 'all 0.3s ease';
+    });
+}
+
+// Logout functionality
+const logoutBtn = document.getElementById('logout-btn');
+logoutBtn.addEventListener('click', async () => {
+  try {
+    // Show logging out toast
+    M.toast({
+      html: '<i class="material-icons left">logout</i>Logging out...',
+      classes: 'blue darken-1',
+      displayLength: 1500
+    });
+
+    const response = await fetch('/logout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      M.toast({
+        html: '<i class="material-icons left">check_circle</i>Logged out successfully!',
+        classes: 'green'
       });
-
-      document.getElementById('upload-progress-container').appendChild(progressBar);
-      return progressBar;
+      
+      // Redirect to auth page
+      setTimeout(() => {
+        window.location.href = result.redirect || '/auth';
+      }, 800);
+    } else {
+      M.toast({
+        html: `<i class="material-icons left">error</i>${result.message || 'Logout failed'}`,
+        classes: 'red'
+      });
     }
-
-    function updateProgressBar(progressBar, percent, speed) {
-      progressBar.querySelector('.determinate').style.width = `${percent}%`;
-      progressBar.querySelector('.progress-text').textContent = `${Math.round(percent)}%`;
-      progressBar.querySelector('.upload-speed').textContent = speed;
-    }
-
-    function completeProgressBar(progressBar) {
-      progressBar.querySelector('.determinate').style.width = '100%';
-      progressBar.querySelector('.progress-text').textContent = 'Complete';
-      progressBar.querySelector('.determinate').style.backgroundColor = '#4CAF50';
-    }
-
-    function errorProgressBar(progressBar) {
-      progressBar.querySelector('.determinate').style.backgroundColor = '#F44336';
-      progressBar.querySelector('.progress-text').textContent = 'Failed';
-    }
-
-    // Update the addFileToUI function to be more robust
-    function addFileToUI(fileData) {
-      if (!fileData || !fileData.name) {
-        console.warn('Missing file data:', fileData);
-      }
-
-      const filesList = document.querySelector('.files-list');
-      const emptyState = filesList.querySelector('.empty-state');
-      if (emptyState) emptyState.remove();
-
-      const fileItem = document.createElement('div');
-      fileItem.className = 'file-item';
-      if (fileData.id) fileItem.dataset.fileId = fileData.id; // ID only for logic, not display
-
-      fileItem.innerHTML = `
-                <div class="file-info">
-                    <i class="material-icons">insert_drive_file</i>
-                    <div class="file-details">
-                        <span class="filename-text">${fileData.name || 'Unknown'}</span>
-                        <div class="file-metadata">
-                            <small>${fileData.size || ''} • Uploaded at ${fileData.created || ''}</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="action-buttons">
-                    ${fileData.id ? `
-                    <a class="btn-floating waves-effect waves-light blue" onclick="downloadFile(this)" title="Download">
-                        <i class="material-icons">download</i>
-                    </a>
-                    <a class="btn-floating waves-effect waves-light red" onclick="deleteFile(this)" title="Delete">
-                        <i class="material-icons">delete</i>
-                    </a>
-                    ` : ''}
-                </div>
-            `;
-      filesList.insertBefore(fileItem, filesList.firstChild);
-    }
-
-    // Add this helper function:
-    async function fetchAndReplaceFilesList() {
-      try {
-        const response = await fetch(window.location.pathname, {
-          cache: "reload"
-        });
-        const html = await response.text();
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-        const newList = doc.querySelector('.files-list');
-        if (newList) {
-          document.querySelector('.files-list').innerHTML = newList.innerHTML;
-        }
-      } catch (err) {
-        console.error('Failed to refresh file list:', err);
-      }
-    }
+  } catch (error) {
+    console.error('Logout error:', error);
+    M.toast({
+      html: '<i class="material-icons left">error</i>Failed to logout. Please try again.',
+      classXXzzes: 'red'
+    });
+  }
+});
   </script>
 </body>
-
 </html>
