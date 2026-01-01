@@ -12,6 +12,7 @@ yarn.lock
 dist/
 build/
 *.zip
+*.exe
 
 # Logs
 logs
@@ -37,10 +38,14 @@ desktop.ini
 *.tmp
 *.temp
 .cache/
+temp/
 
 # Upload directory for files
 uploads/*
 !uploads/.gitkeep
+
+# Config (contains PIN - auto-generated)
+config.json
 
 # Testing
 coverage/
