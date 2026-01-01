@@ -11,6 +11,40 @@ const archiver = require('archiver');
 const UPLOAD_DIR = path.join(process.cwd(), 'uploads');
 const TEMP_DIR = path.join(process.cwd(), 'temp');
 const CHUNKS_DIR = path.join(TEMP_DIR, 'chunks');
+const CONFIG_FILE = path.join(process.cwd(), 'config.json');
+
+// Default PIN
+const DEFAULT_PIN = '123456';
+
+// Load or initialize config
+function loadConfig() {
+    try {
+        if (fs.existsSync(CONFIG_FILE)) {
+            const data = fs.readFileSync(CONFIG_FILE, 'utf8');
+            return JSON.parse(data);
+        }
+    } catch (err) {
+        console.error('Error loading config:', err);
+    }
+    return { pin: process.env.ADMIN_PIN || DEFAULT_PIN };
+}
+
+// Save config
+function saveConfig(config) {
+    try {
+        fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2));
+        return true;
+    } catch (err) {
+        console.error('Error saving config:', err);
+        return false;
+    }
+}
+
+// Get current PIN
+function getCurrentPIN() {
+    const config = loadConfig();
+    return config.pin || DEFAULT_PIN;
+}
 
 // Ensure directories exist
 [UPLOAD_DIR, TEMP_DIR, CHUNKS_DIR].forEach(dir => {
@@ -245,8 +279,8 @@ router.post('/verify-pin', (req, res) => {
     
     const { pin } = req.body;
     
-    // Get PIN from environment variable or use default
-    const ADMIN_PIN = process.env.ADMIN_PIN || '123456';
+    // Get PIN from config or environment variable
+    const ADMIN_PIN = getCurrentPIN();
     
     console.log('PIN received:', pin);
     console.log('Expected PIN:', ADMIN_PIN);
@@ -298,6 +332,89 @@ router.post('/verify-pin', (req, res) => {
             redirect: null
         });
     }
+});
+
+// Get current PIN - REQUIRES AUTH
+router.get('/api/settings/pin', requireAuth, (req, res) => {
+    const currentPIN = getCurrentPIN();
+    res.json({
+        success: true,
+        pin: currentPIN,
+        isDefault: currentPIN === DEFAULT_PIN
+    });
+});
+
+// Change PIN - REQUIRES AUTH
+router.post('/api/settings/change-pin', requireAuth, (req, res) => {
+    const { oldPin, newPin } = req.body;
+    
+    // Validate inputs
+    if (!oldPin || !newPin) {
+        return res.status(400).json({
+            success: false,
+            message: 'Both old and new PIN are required'
+        });
+    }
+    
+    // Validate new PIN format (6 digits)
+    if (!/^\d{6}$/.test(newPin)) {
+        return res.status(400).json({
+            success: false,
+            message: 'New PIN must be exactly 6 digits'
+        });
+    }
+    
+    // Verify old PIN
+    const currentPIN = getCurrentPIN();
+    if (oldPin !== currentPIN) {
+        return res.status(401).json({
+            success: false,
+            message: 'Current PIN is incorrect'
+        });
+    }
+    
+    // Save new PIN
+    const config = loadConfig();
+    config.pin = newPin;
+    
+    if (saveConfig(config)) {
+        console.log('✓ PIN changed successfully');
+        res.json({
+            success: true,
+            message: 'PIN changed successfully'
+        });
+    } else {
+        res.status(500).json({
+            success: false,
+            message: 'Failed to save new PIN'
+        });
+    }
+});
+
+// Logout endpoint - REQUIRES AUTH
+router.post('/logout', requireAuth, (req, res) => {
+    console.log('=== Logout Request ===');
+    console.log('Session before logout:', req.session);
+    
+    req.session.destroy((err) => {
+        if (err) {
+            console.error('❌ Logout error:', err);
+            return res.status(500).json({
+                success: false,
+                message: 'Failed to logout'
+            });
+        }
+        
+        // Clear the session cookie
+        res.clearCookie('remoteshare.sid');
+        
+        console.log('✓ Logged out successfully');
+        res.json({
+            success: true,
+            message: 'Logged out successfully',
+            redirect: '/auth'
+        });
+    });
 });
 
 // Home page - REQUIRES AUTH
@@ -460,7 +577,7 @@ router.post('/upload-chunk/cancel', requireAuth, async (req, res) => {
 
 // ============= END CHUNKED UPLOAD ROUTES =============
 
-// Enhanced download endpoint with streaming and range support
+// Enhanced download endpoint with streaming and range support - iOS COMPATIBLE
 router.get('/download/:fileId', requireAuth, downloadLimiter, async (req, res) => {
     try {
         const fileId = req.params.fileId;
@@ -477,13 +594,16 @@ router.get('/download/:fileId', requireAuth, downloadLimiter, async (req, res) =
         const fileSize = stat.size;
         const range = req.headers.range;
         const originalName = getOriginalFileName(fileId);
+        const userAgent = req.headers['user-agent'] || '';
+        const isIOS = /iPad|iPhone|iPod/.test(userAgent);
 
         console.log('File size:', formatFileSize(fileSize));
         console.log('Range request:', range || 'none');
+        console.log('iOS device detected:', isIOS);
 
-        // Set longer timeout for this specific request
-        req.setTimeout(0); // Disable timeout for download
-        res.setTimeout(0); // Disable timeout for response
+        // Disable timeouts completely for large downloads
+        req.setTimeout(0);
+        res.setTimeout(0);
 
         if (range) {
             // Handle range request for partial content
@@ -497,7 +617,7 @@ router.get('/download/:fileId', requireAuth, downloadLimiter, async (req, res) =
             const fileStream = fs.createReadStream(filePath, { 
                 start, 
                 end,
-                highWaterMark: 64 * 1024 // 64KB chunks for streaming
+                highWaterMark: 256 * 1024 // Increased to 256KB for better throughput
             });
             
             res.writeHead(206, {
@@ -505,11 +625,15 @@ router.get('/download/:fileId', requireAuth, downloadLimiter, async (req, res) =
                 'Accept-Ranges': 'bytes',
                 'Content-Length': chunksize,
                 'Content-Type': 'application/octet-stream',
-                'Content-Disposition': `attachment; filename="${encodeURIComponent(originalName)}"`,
-                'Cache-Control': 'no-cache, no-store, must-revalidate',
+                'Content-Disposition': `attachment; filename*=UTF-8''${encodeURIComponent(originalName)}`,
+                'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',
                 'Pragma': 'no-cache',
                 'Expires': '0',
-                'Connection': 'keep-alive'
+                'Connection': 'keep-alive',
+                'Access-Control-Allow-Origin': '*',
+                'Transfer-Encoding': 'chunked',
+                'ETag': `"${fileSize}-${stat.mtime.getTime()}"`,
+                'Last-Modified': stat.mtime.toUTCString()
             });
             
             fileStream.pipe(res);
@@ -518,46 +642,65 @@ router.get('/download/:fileId', requireAuth, downloadLimiter, async (req, res) =
                 console.error('Stream error:', error);
                 if (!res.headersSent) {
                     res.status(500).json({ error: 'Error streaming file' });
-                } else {
-                    res.end();
                 }
+                fileStream.destroy();
             });
 
             fileStream.on('end', () => {
                 console.log('Range download complete');
             });
 
-            // Handle client disconnect
             req.on('close', () => {
-                console.log('Client disconnected, stopping stream');
+                console.log('Client disconnected from range request');
                 fileStream.destroy();
             });
 
         } else {
-            // Full file download
+            // Full file download - Optimized for iOS
             console.log('Streaming full file:', originalName);
             
-            res.writeHead(200, {
+            // iOS needs specific headers for reliable downloads
+            const headers = {
                 'Content-Length': fileSize,
                 'Content-Type': 'application/octet-stream',
-                'Content-Disposition': `attachment; filename="${encodeURIComponent(originalName)}"`,
+                'Content-Disposition': `attachment; filename*=UTF-8''${encodeURIComponent(originalName)}`,
                 'Accept-Ranges': 'bytes',
-                'Cache-Control': 'no-cache, no-store, must-revalidate',
+                'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',
                 'Pragma': 'no-cache',
                 'Expires': '0',
-                'Connection': 'keep-alive'
-            });
+                'Connection': 'keep-alive',
+                'Transfer-Encoding': 'chunked',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+                'X-Content-Type-Options': 'nosniff',
+                'ETag': `"${fileSize}-${stat.mtime.getTime()}"`,
+                'Last-Modified': stat.mtime.toUTCString(),
+                'Vary': 'Accept-Encoding'
+            };
+
+            // iOS specific optimizations
+            if (isIOS) {
+                headers['Content-Security-Policy'] = "default-src 'self'";
+            }
+            
+            res.writeHead(200, headers);
             
             const fileStream = fs.createReadStream(filePath, {
-                highWaterMark: 64 * 1024 // 64KB chunks for better performance
+                highWaterMark: 256 * 1024 // Increased to 256KB chunks
             });
 
             let bytesStreamed = 0;
+            let lastLogTime = Date.now();
             
             fileStream.on('data', (chunk) => {
                 bytesStreamed += chunk.length;
-                if (bytesStreamed % (1024 * 1024 * 10) === 0) { // Log every 10MB
-                    console.log(`Streamed ${formatFileSize(bytesStreamed)} / ${formatFileSize(fileSize)}`);
+                // Log every 50MB for debugging
+                if (bytesStreamed % (1024 * 1024 * 50) === 0) {
+                    const elapsed = (Date.now() - lastLogTime) / 1000;
+                    const speed = chunk.length / elapsed;
+                    console.log(`Streamed ${formatFileSize(bytesStreamed)} / ${formatFileSize(fileSize)} (${formatFileSize(speed)}/s)`);
+                    lastLogTime = Date.now();
                 }
             });
 
@@ -567,22 +710,26 @@ router.get('/download/:fileId', requireAuth, downloadLimiter, async (req, res) =
                 console.error('Stream error:', error);
                 if (!res.headersSent) {
                     res.status(500).json({ error: 'Error streaming file' });
-                } else {
-                    res.end();
                 }
-            });
-
-            fileStream.on('end', () => {
-                console.log('✓ Download complete:', originalName);
-            });
-
-            // Handle client disconnect
-            req.on('close', () => {
-                console.log('Client disconnected, stopping stream');
                 fileStream.destroy();
             });
 
-            // Handle response errors
+            fileStream.on('end', () => {
+                console.log('✓ Download complete:', originalName, `(${formatFileSize(bytesStreamed)})`);
+            });
+
+            req.on('close', () => {
+                if (bytesStreamed < fileSize) {
+                    console.log(`⚠ Client disconnected. Downloaded ${formatFileSize(bytesStreamed)} of ${formatFileSize(fileSize)}`);
+                }
+                fileStream.destroy();
+            });
+
+            // Backpressure handling
+            res.on('drain', () => {
+                fileStream.resume();
+            });
+
             res.on('error', (error) => {
                 console.error('Response error:', error);
                 fileStream.destroy();

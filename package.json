@@ -1,11 +1,25 @@
 {
-  "name": "express-shared-app",
+  "name": "remoteshare",
   "version": "1.0.0",
-  "description": "A simple Express application.",
-  "main": "src/app.js",
+  "description": "RemoteShare - Easy file sharing across devices",
+  "main": "launcher.js",
+  "bin": "launcher.js",
   "scripts": {
-    "start": "node src/app.js",
-    "dev": "nodemon src/app.js --ext js,ejs,css"
+    "start": "node launcher.js",
+    "dev": "nodemon src/app.js --ext js,ejs,css",
+    "build": "pkg . --targets node18-win-x64 --output dist/RemoteShare.exe",
+    "build:all": "pkg . --targets node18-win-x64,node18-macos-x64,node18-linux-x64 --out-path dist"
+  },
+  "pkg": {
+    "assets": [
+      "src/views/**/*",
+      "src/public/**/*",
+      "src/routes/**/*"
+    ],
+    "scripts": [
+      "src/**/*.js"
+    ],
+    "outputPath": "dist"
   },
   "dependencies": {
     "archiver": "^7.0.1",
@@ -23,6 +37,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "pkg": "^5.8.1"
   }
 }

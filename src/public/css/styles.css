@@ -793,3 +793,726 @@ body.dark-mode .bulk-actions .btn-small:hover {
 .bulk-actions .btn-small:active {
   transform: translateY(1px);
 }
+
+/* ============================================
+   Modern Media Preview Modal - Compact Design
+   ============================================ */
+
+.media-modal-modern.modal {
+  border-radius: 16px;
+  background: #fafafa;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.25);
+  max-width: 900px;
+  width: 90vw;
+  max-height: 90vh;
+  padding: 0;
+  overflow: hidden;
+}
+
+body.dark-mode .media-modal-modern.modal {
+  background: #1a1d21;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+}
+
+.media-modal-modern .modal-content {
+  padding: 0;
+  background: inherit;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header Bar */
+.media-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #fff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  flex-shrink: 0;
+}
+
+body.dark-mode .media-modal-header {
+  background: #23272a;
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+.media-modal-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.media-type-icon {
+  font-size: 20px;
+  color: #1976d2;
+  flex-shrink: 0;
+}
+
+body.dark-mode .media-type-icon {
+  color: #64b5f6;
+}
+
+.media-modal-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+body.dark-mode .media-modal-title {
+  color: #e0e0e0;
+}
+
+/* Action Buttons */
+.media-modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.media-action-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  color: #666;
+}
+
+.media-action-btn:hover {
+  background: rgba(0, 0, 0, 0.06);
+  color: #333;
+}
+
+.media-action-btn.close-btn:hover {
+  background: rgba(244, 67, 54, 0.1);
+  color: #f44336;
+}
+
+body.dark-mode .media-action-btn {
+  color: #aaa;
+}
+
+body.dark-mode .media-action-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+body.dark-mode .media-action-btn.close-btn:hover {
+  background: rgba(244, 67, 54, 0.15);
+  color: #ef5350;
+}
+
+.media-action-btn i {
+  font-size: 20px;
+}
+
+/* Media Container */
+.media-modal-modern .media-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  background: #f0f0f0;
+  min-height: 300px;
+  max-height: calc(90vh - 60px);
+  overflow: auto;
+}
+
+body.dark-mode .media-modal-modern .media-container {
+  background: #141619;
+}
+
+/* Media Elements */
+.media-modal-modern video {
+  max-width: 100%;
+  max-height: calc(90vh - 100px);
+  border-radius: 8px;
+  background: #000;
+}
+
+.media-modal-modern audio {
+  width: 100%;
+  max-width: 400px;
+}
+
+.media-modal-modern img {
+  max-width: 100%;
+  max-height: calc(90vh - 100px);
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.media-modal-modern iframe {
+  width: 100%;
+  height: calc(90vh - 100px);
+  border: none;
+  border-radius: 8px;
+  background: #fff;
+}
+
+body.dark-mode .media-modal-modern iframe {
+  background: #1a1d22;
+}
+
+/* Unsupported Message */
+.media-modal-modern .unsupported-message {
+  text-align: center;
+  padding: 48px 24px;
+  color: #888;
+}
+
+.media-modal-modern .unsupported-message i {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.4;
+  display: block;
+}
+
+.media-modal-modern .unsupported-message p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+body.dark-mode .media-modal-modern .unsupported-message {
+  color: #777;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .media-modal-modern.modal {
+    width: 100vw;
+    max-width: 100vw;
+    border-radius: 0;
+    max-height: 100vh;
+  }
+
+  .media-modal-header {
+    padding: 10px 12px;
+  }
+
+  .media-modal-title {
+    font-size: 13px;
+  }
+
+  .media-action-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .media-action-btn i {
+    font-size: 18px;
+  }
+
+  .media-modal-modern .media-container {
+    padding: 12px;
+    min-height: 200px;
+  }
+
+  .media-modal-modern img,
+  .media-modal-modern video {
+    max-height: calc(100vh - 120px);
+  }
+
+  .media-modal-modern iframe {
+    height: calc(100vh - 80px);
+  }
+}
+
+/* Keep existing styles for other sections */
+.share-url-input.copied {
+    background-color: #e8f5e9 !important;
+    transition: background-color 0.3s ease;
+}
+
+body.dark-mode .share-url-input.copied {
+    background-color: #1b5e20 !important;
+}
+
+.copy-btn {
+    transition: all 0.2s ease;
+}
+
+.copy-btn:active {
+    transform: scale(0.95);
+}
+
+/* Enhanced logout button styling */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.action-divider {
+    width: 1px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 0 4px;
+}
+
+body.dark-mode .action-divider {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+#logout-btn.theme-toggle-btn {
+    background: rgba(244, 67, 54, 0.1);
+    border: 1px solid rgba(244, 67, 54, 0.2);
+    transition: all 0.3s ease;
+}
+
+#logout-btn.theme-toggle-btn:hover {
+    background: rgba(244, 67, 54, 0.2);
+    border-color: rgba(244, 67, 54, 0.4);
+    transform: translateY(-2px);
+}
+
+#logout-btn.theme-toggle-btn i {
+    color: #f44336;
+}
+
+body.dark-mode #logout-btn.theme-toggle-btn {
+    background: rgba(244, 67, 54, 0.15);
+    border-color: rgba(244, 67, 54, 0.3);
+}
+
+body.dark-mode #logout-btn.theme-toggle-btn:hover {
+    background: rgba(244, 67, 54, 0.25);
+    border-color: rgba(244, 67, 54, 0.5);
+}
+
+body.dark-mode #logout-btn.theme-toggle-btn i {
+    color: #ef5350;
+}
+
+/* Isomorphic Design - Upload Button */
+#upload-btn {
+    cursor: pointer;
+    background: linear-gradient(145deg, #3d5a80, #2c4563) !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 16px !important;
+    box-shadow: 
+        0 6px 12px rgba(44, 62, 80, 0.12),
+        0 2px 4px rgba(44, 62, 80, 0.08),
+        inset 0 1px 0px rgba(255, 255, 255, 0.15) !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    padding: 10px 24px !important;
+    transition: all 0.2s ease !important;
+    position: relative !important;
+    overflow: hidden !important;
+    text-transform: none !important;
+    letter-spacing: 0.5px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    height: auto !important;
+}
+
+#upload-btn:hover:not(:active) {
+    background: linear-gradient(145deg, #4a6a92, #3a5575) !important;
+    box-shadow: 
+        0 8px 16px rgba(44, 62, 80, 0.15),
+        0 3px 6px rgba(44, 62, 80, 0.1),
+        inset 0 1px 0px rgba(255, 255, 255, 0.2) !important;
+    transform: translateY(-1px) !important;
+}
+
+#upload-btn:active {
+    background: linear-gradient(145deg, #2c4563, #3d5a80) !important;
+    box-shadow: 
+        0 3px 6px rgba(44, 62, 80, 0.08),
+        0 1px 2px rgba(0, 0, 0, 0.06),
+        inset 0 1px 3px rgba(0, 0, 0, 0.12) !important;
+    transform: translateY(0) !important;
+}
+
+#upload-btn i {
+    font-size: 20px !important;
+    transition: transform 0.2s ease !important;
+}
+
+#upload-btn:hover i {
+    transform: scale(1.05) !important;
+}
+
+/* Dark mode upload button */
+body.dark-mode #upload-btn {
+    background: linear-gradient(145deg, #2d3748, #1a202c) !important;
+    color: #e2e8f0 !important;
+    box-shadow: 
+        0 8px 16px rgba(0, 0, 0, 0.3),
+        0 3px 6px rgba(0, 0, 0, 0.2),
+        inset 0 1px 2px rgba(255, 255, 255, 0.1) !important;
+}
+
+body.dark-mode #upload-btn:hover:not(:active) {
+    background: linear-gradient(145deg, #3d4758, #2a3142) !important;
+    box-shadow: 
+        0 12px 24px rgba(0, 0, 0, 0.4),
+        0 5px 12px rgba(0, 0, 0, 0.25),
+        inset 0 1px 2px rgba(255, 255, 255, 0.12) !important;
+    transform: translateY(0) !important;
+}
+
+body.dark-mode #upload-btn:active {
+    background: linear-gradient(145deg, #1a202c, #2d3748) !important;
+    box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.2),
+        0 2px 4px rgba(0, 0, 0, 0.15),
+        inset 0 2px 4px rgba(0, 0, 0, 0.15) !important;
+    transform: translateY(0) !important;
+}
+
+/* Ripple effect animation */
+@keyframes uploadButtonRipple {
+    0% {
+        transform: scale(0);
+        opacity: 0.6;
+    }
+    100% {
+        transform: scale(3);
+        opacity: 0;
+    }
+}
+
+#upload-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    transform: translate(-50%, -50%) scale(0);
+    pointer-events: none;
+}
+
+#upload-btn:active::before {
+    animation: uploadButtonRipple 0.5s ease-out;
+}
+
+/* ============================================
+   YouTube Music Style Audio Player
+   ============================================ */
+
+.audio-player-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 24px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    border-radius: 20px;
+    max-width: 360px;
+    margin: 0 auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+/* Rotating Disk */
+.audio-disk-container {
+    position: relative;
+    margin-bottom: 24px;
+}
+
+.audio-disk {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #2d2d2d, #1a1a1a);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 
+        0 0 0 8px rgba(255, 255, 255, 0.05),
+        0 0 0 12px rgba(255, 255, 255, 0.03),
+        0 20px 40px rgba(0, 0, 0, 0.4),
+        inset 0 0 30px rgba(0, 0, 0, 0.3);
+}
+
+.audio-disk::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: repeating-radial-gradient(
+        circle at center,
+        transparent 0,
+        transparent 2px,
+        rgba(255, 255, 255, 0.03) 3px,
+        transparent 4px
+    );
+}
+
+.audio-disk::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: conic-gradient(
+        from 0deg,
+        transparent 0deg,
+        rgba(255, 255, 255, 0.1) 45deg,
+        transparent 90deg,
+        rgba(255, 255, 255, 0.05) 180deg,
+        transparent 270deg
+    );
+}
+
+.audio-disk.spinning {
+    animation: diskSpin 3s linear infinite;
+}
+
+@keyframes diskSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.disk-inner {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #e91e63, #9c27b0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 
+        0 4px 15px rgba(233, 30, 99, 0.4),
+        inset 0 0 10px rgba(255, 255, 255, 0.2);
+    z-index: 1;
+}
+
+.disk-inner::before {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: #1a1a2e;
+    border-radius: 50%;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.disk-icon {
+    font-size: 28px;
+    color: #fff;
+    opacity: 0;
+}
+
+/* Audio Info */
+.audio-info {
+    text-align: center;
+    margin-bottom: 20px;
+    max-width: 100%;
+}
+
+.audio-title {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 280px;
+}
+
+.audio-artist {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 13px;
+}
+
+/* Progress Bar */
+.audio-progress-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+.audio-time {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 12px;
+    font-family: 'Roboto Mono', monospace;
+    min-width: 40px;
+}
+
+.audio-time.current {
+    text-align: right;
+}
+
+.audio-time.duration {
+    text-align: left;
+}
+
+.audio-progress-bar {
+    flex: 1;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    position: relative;
+    cursor: pointer;
+    transition: height 0.2s;
+}
+
+.audio-progress-bar:hover {
+    height: 6px;
+}
+
+.audio-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #e91e63, #9c27b0);
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.1s linear;
+}
+
+.audio-progress-handle {
+    position: absolute;
+    top: 50%;
+    left: 0%;
+    width: 12px;
+    height: 12px;
+    background: #fff;
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.2s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.audio-progress-bar:hover .audio-progress-handle {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* Controls */
+.audio-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.audio-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.audio-btn:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.audio-btn i {
+    font-size: 24px;
+}
+
+.audio-btn.play-pause {
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(145deg, #e91e63, #c2185b);
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(233, 30, 99, 0.4);
+}
+
+.audio-btn.play-pause:hover {
+    background: linear-gradient(145deg, #f06292, #e91e63);
+    transform: scale(1.05);
+}
+
+.audio-btn.play-pause i {
+    font-size: 32px;
+}
+
+.audio-btn.shuffle,
+.audio-btn.repeat {
+    opacity: 0.6;
+}
+
+.audio-btn.shuffle:hover,
+.audio-btn.repeat:hover {
+    opacity: 1;
+}
+
+.audio-btn.prev i,
+.audio-btn.next i {
+    font-size: 32px;
+}
+
+/* Volume */
+.audio-volume-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    max-width: 160px;
+}
+
+.audio-volume-bar {
+    flex: 1;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    cursor: pointer;
+    position: relative;
+}
+
+.audio-volume-fill {
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 2px;
+    transition: width 0.1s;
+}
+
+.audio-btn.volume-btn {
+    padding: 4px;
+}
+
+.audio-btn.volume-btn i {
+    font-size: 20px;
+}
+
+/* Light Mode Adjustments */
+body:not(.dark-mode) .audio-player-wrapper {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+}
+
+body:not(.dark-mode) .audio-disk {
+    background: linear-gradient(145deg, #fff, #e0e0e0);
+    box-shadow: 
+        0 0 0 8px rgba(0, 0, 0, 0.05),
+        0 0 0 12px rgba(0, 0, 0, 0.03),
+        0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+body:not(.dark-mode) .disk-inner::before {
+    background: #667eea;
+}
