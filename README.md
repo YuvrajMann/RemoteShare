@@ -9,9 +9,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
 [![Version](https://img.shields.io/badge/version-1.0.0-brightgreen.svg)](package.json)
-[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](#-standalone-executable)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](#standalone-executable)
 
-[Features](#-features) • [Quick Start](#-quick-start) • [Executable](#-standalone-executable) • [Developer Guide](#-developer-guide) • [API](#-api-reference) • [Contributing](#-contributing)
+[Features](#features) • [Quick Start](#quick-start) • [Executable](#standalone-executable) • [Developer Guide](#developer-guide) • [API](#api-reference) • [Contributing](#contributing)
 
 </div>
 
@@ -19,16 +19,16 @@
 
 ## 📋 Table of Contents
 
-- [Features](#-features)
-- [Quick Start](#-quick-start)
-- [Installation & Setup](#-installation--setup)
-- [Standalone Executable](#-standalone-executable)
-- [Developer Guide](#-developer-guide)
-- [API Reference](#-api-reference)
-- [Technical Overview](#-technical-overview)
-- [Troubleshooting](#-troubleshooting)
-- [Contributing](#-contributing)
-- [License](#-license)
+- [Features](#features)
+- [Quick Start](#quick-start)
+- [Installation & Setup](#installation-setup)
+- [Standalone Executable](#standalone-executable)
+- [Developer Guide](#developer-guide)
+- [API Reference](#api-reference)
+- [Technical Overview](#technical-overview)
+- [Troubleshooting](#troubleshooting)
+- [Contributing](#contributing)
+- [License](#license)
 
 <details>
 <summary>📸 <strong>Screenshots Gallery</strong> (click to expand)</summary>
