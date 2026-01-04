@@ -1,151 +1,152 @@
+<div align="center">
+
 # 🔗 RemoteShare
-<img width="1916" height="573" alt="image" src="https://github.com/user-attachments/assets/91749d00-a856-4bc1-a130-7a8a90339a3b" />
-<img width="630" height="454" alt="image" src="https://github.com/user-attachments/assets/077433cc-67fe-468e-ab88-110a7fe8269c" />
-<img width="501" height="599" alt="image" src="https://github.com/user-attachments/assets/253c5381-a521-4015-b997-10687d96e433" />
-<img width="1580" height="795" alt="image" src="https://github.com/user-attachments/assets/1a39bb74-37eb-4992-aa86-cf0abee494dd" />
-<img width="1885" height="822" alt="image" src="https://github.com/user-attachments/assets/4b075d0b-7356-448f-a8e9-d3b72f0a0308" />
 
-<p align="center">
-  <img src="src/public/favicon.png" alt="RemoteShare Logo" width="80" height="80">
-</p>
+<img src="src/public/favicon.png" alt="RemoteShare Logo" width="80" height="80">
 
-<p align="center">
-  <strong>Seamless file sharing across all your devices on the local network</strong>
-</p>
+**Seamless file sharing across all your devices on the local network**
 
-<p align="center">
-  <a href="#-features">Features</a> •
-  <a href="#-quick-start">Quick Start</a> •
-  <a href="#-standalone-executable">Executable</a> •
-  <a href="#-developer-guide">Developer Guide</a> •
-  <a href="#-technical-overview">Technical Overview</a>
-</p>
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
+[![Version](https://img.shields.io/badge/version-1.0.0-brightgreen.svg)](package.json)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](#standalone-executable)
+
+[Features](#features) • [Quick Start](#quick-start) • [Executable](#standalone-executable) • [Developer Guide](#developer-guide) • [API](#api-reference) • [Contributing](#contributing)
+
+</div>
+
+---
+
+## 📋 Table of Contents
+
+- [Features](#features)
+- [Quick Start](#quick-start)
+- [Installation & Setup](#installation-setup)
+- [Standalone Executable](#standalone-executable)
+- [Developer Guide](#developer-guide)
+- [API Reference](#api-reference)
+- [Technical Overview](#technical-overview)
+- [Troubleshooting](#troubleshooting)
+- [Contributing](#contributing)
+- [License](#license)
+
+<details>
+<summary>📸 <strong>Screenshots Gallery</strong> (click to expand)</summary>
+
+<br>
+
+<img width="1916" alt="Dashboard View" src="https://github.com/user-attachments/assets/91749d00-a856-4bc1-a130-7a8a90339a3b" />
+<img width="630" alt="Mobile View" src="https://github.com/user-attachments/assets/077433cc-67fe-468e-ab88-110a7fe8269c" />
+<img width="501" alt="File Preview" src="https://github.com/user-attachments/assets/253c5381-a521-4015-b997-10687d96e433" />
+<img width="1580" alt="Upload Progress" src="https://github.com/user-attachments/assets/1a39bb74-37eb-4992-aa86-cf0abee494dd" />
+<img width="1885" alt="Media Player" src="https://github.com/user-attachments/assets/4b075d0b-7356-448f-a8e9-d3b72f0a0308" />
+
+</details>
 
 ---
 
 ## ✨ Features
 
-### 📤 File Management
-- **Drag & Drop Upload** - Simply drag files onto the page to upload
-- **Multi-file Upload** - Upload multiple files at once with progress tracking
-- **Chunked Uploads** - Large files (>10MB) are automatically split into chunks for reliable uploads
-- **Real-time Progress** - See upload speed and percentage in real-time
-- **Cancel Uploads** - Cancel ongoing uploads anytime
+<table>
+<tr>
+<td width="50%">
 
-### 📥 File Operations
-- **One-click Download** - Download any file instantly
-- **Bulk Selection** - Double-click to enter selection mode, select multiple files
-- **Bulk Download** - Download multiple files as a ZIP archive
-- **Bulk Delete** - Delete multiple files at once
-- **File Preview** - Preview files directly in the browser
+**📤 File Management**
+- Drag & Drop Upload
+- Multi-file Upload with Progress
+- Chunked Uploads (>10MB auto-split)
+- Real-time Progress Tracking
+- Cancel Uploads Anytime
 
-### 👁️ Media Preview
-- **Video Player** - Preview MP4, WebM, OGG, MOV, MKV, AVI files
-- **Audio Player** - YouTube Music-style player with rotating disk animation
-- **Image Viewer** - View PNG, JPG, GIF, SVG, WebP, BMP images
-- **PDF Viewer** - Inline PDF preview with fallback options
-- **Code Viewer** - Syntax-highlighted preview for code files with line numbers
-- **Text Files** - Preview TXT, MD, JSON, XML, YAML, and more
+**👁️ Media Preview**
+- Video: MP4, WebM, OGG, MOV, MKV, AVI
+- Audio: YouTube Music-style Player
+- Images: PNG, JPG, GIF, SVG, WebP, BMP
+- PDF: Inline Preview
+- Code: Syntax-highlighted with Line Numbers
+- Text: TXT, MD, JSON, XML, YAML
 
-### 🎨 User Interface
-- **Modern Design** - Clean, Material Design-inspired interface
-- **Dark/Light Mode** - Toggle between themes (persisted in browser)
-- **Responsive Layout** - Works on desktop, tablet, and mobile
-- **File Type Icons** - Color-coded icons for different file types
-- **Compact Modals** - Modern, non-intrusive modal dialogs
+**🔐 Security**
+- 6-digit PIN Protection
+- Session-based Authentication
+- Configurable PIN via Settings
+- Logout Support
 
-### 🔐 Security
-- **PIN Protection** - 6-digit PIN required to access the application
-- **Session-based Auth** - Secure session management
-- **Configurable PIN** - Change PIN anytime via Settings
-- **Logout Support** - Securely end your session
+</td>
+<td width="50%">
 
-### 📱 Connectivity
-- **QR Code Sharing** - Scan QR code to instantly access from mobile devices
-- **LAN Access** - Access from any device on the same network
-- **Auto IP Detection** - Automatically shows accessible IP addresses
+**📥 File Operations**
+- One-click Download
+- Bulk Selection Mode
+- Bulk Download as ZIP
+- Bulk Delete
+- In-browser Preview
 
-### 🖥️ Standalone Mode
-- **Single Executable** - Run as a standalone .exe without Node.js
-- **Auto Browser Launch** - Opens browser automatically on start
-- **No Installation** - Just double-click to run
+**🎨 User Interface**
+- Modern Material Design
+- Dark/Light Mode Toggle
+- Fully Responsive Layout
+- Color-coded File Icons
+- Compact Modal Dialogs
+
+**📱 Connectivity**
+- QR Code Sharing
+- LAN Access
+- Auto IP Detection
+
+**🖥️ Standalone Mode**
+- Single Executable (.exe)
+- Auto Browser Launch
+- No Installation Required
+
+</td>
+</tr>
+</table>
 
 ---
 
 ## 🚀 Quick Start
 
+### 🎯 Choose Your Method
+
+| Method | Best For | Steps |
+|--------|----------|-------|
+| **Standalone .exe** | End users, no setup | Download → Run → Enter PIN |
+| **Node.js Script** | Quick testing | Run `start-server.bat` |
+| **Developer Mode** | Development | Clone → Install → Dev |
+
 ### For End Users (Standalone Executable)
 
-1. **Download** `RemoteShare.exe` from the releases
-2. **Double-click** to run - browser opens automatically
-3. **Enter PIN** - Default PIN is `123456`
-4. **Share the URL** - Use the QR code or copy the address for other devices
+```bash
+# 1. Download RemoteShare.exe from releases
+# 2. Double-click to run (browser opens automatically)
+# 3. Enter PIN: 123456 (default)
+# 4. Share URL via QR code or copy address
+```
+
+> **💡 Tip:** The executable requires no installation and bundles everything needed!
 
 ### For Users with Node.js
 
-1. **Double-click** `start-server.bat`
-2. The server will install dependencies and start
-3. Access the shown URL from any device on your network
-
----
-
-## 📦 Standalone Executable
-
-### Building the Executable
-
-RemoteShare can be packaged as a standalone executable that runs without requiring Node.js installation.
-
 ```bash
-# Install dependencies first
-npm install
-
-# Build for Windows
-npm run build
-
-# Build for all platforms (Windows, macOS, Linux)
-npm run build:all
+# Windows: Double-click start-server.bat
+# Or manually:
+node launcher.js
+# Access the shown URL from any device on your network
 ```
 
-**Output:**
-- Windows: `dist/RemoteShare.exe` (~50MB)
-- macOS: `dist/RemoteShare-macos`
-- Linux: `dist/RemoteShare-linux`
-
-### How It Works
-
-The executable bundles:
-- Node.js runtime (node18)
-- All application code
-- Static assets (CSS, JS, images)
-- View templates (EJS)
-- All npm dependencies
-
-Uses [`pkg`](https://github.com/vercel/pkg) for packaging.
-
 ---
 
-## 👨‍💻 Developer Guide
+## 🛠️ Installation & Setup
 
-### Prerequisites
-
-- **Node.js** 18.x or higher
-- **npm** 9.x or higher
-- **Git**
-
-### Installation
+**Prerequisites:** Node.js 18+ • npm 9+ • Git
 
 ```bash
-# Clone the repository
+# Clone and install
 git clone https://github.com/yourusername/remoteshare.git
 cd remoteshare
-
-# Install dependencies
 npm install
-```
 
-### Development
-
-```bash
 # Start development server with auto-reload
 npm run dev
 
@@ -153,10 +154,42 @@ npm run dev
 npm start
 
 # Build executable
-npm run build
+npm run build          # Windows only
+npm run build:all      # All platforms
 ```
 
+**Environment Variables:**
+- `PORT` - Server port (default: `3000`)
+
+---
+
+## 📦 Standalone Executable
+
+Build RemoteShare as a single executable that runs without Node.js installation.
+
+```bash
+npm run build          # Windows: dist/RemoteShare.exe (~50MB)
+npm run build:all      # All platforms (Windows, macOS, Linux)
+```
+
+**What's Included:**
+- Node.js runtime (node18) • Application code • Static assets • View templates • npm dependencies
+
+**Platform Support:**
+- 🪟 Windows: `dist/RemoteShare.exe`
+- 🍎 macOS: `dist/RemoteShare-macos`
+- 🐧 Linux: `dist/RemoteShare-linux`
+
+Uses [`pkg`](https://github.com/vercel/pkg) for packaging.
+
+---
+
+## 👨‍💻 Developer Guide
+
 ### Project Structure
+
+<details>
+<summary>📁 <strong>File Tree</strong> (click to expand)</summary>
 
 ```
 express-shared-app/
@@ -174,40 +207,64 @@ express-shared-app/
 │       │   └── main.js     # Frontend JavaScript
 │       └── favicon.png     # Application icon
 ├── uploads/                # Uploaded files storage
-├── temp/
-│   └── chunks/            # Temporary chunk storage
-├── launcher.js            # Executable entry point
-├── config.json            # PIN configuration (auto-created)
-├── package.json           # Dependencies and scripts
-├── nodemon.json           # Dev server configuration
-└── start-server.bat       # Windows quick-start script
+├── temp/chunks/            # Temporary chunk storage
+├── launcher.js             # Executable entry point
+├── config.json             # PIN configuration (auto-created)
+├── package.json            # Dependencies and scripts
+├── nodemon.json            # Dev server configuration
+└── start-server.bat        # Windows quick-start script
 ```
+
+</details>
 
 ### Key Files
 
-| File | Purpose |
-|------|---------|
-| `src/app.js` | Express server setup, middleware, static file serving |
-| `src/routes/index.js` | All routes: upload, download, delete, auth, settings |
-| `src/views/index.ejs` | Main UI with file list, modals, and inline styles |
-| `src/public/js/main.js` | Frontend logic: uploads, previews, UI interactions |
-| `src/public/css/styles.css` | All styling including dark mode |
-| `launcher.js` | Standalone executable entry point with browser launch |
+- **`src/app.js`** - Express server setup, middleware, static file serving
+- **`src/routes/index.js`** - All routes: upload, download, delete, auth, settings
+- **`src/views/index.ejs`** - Main UI with file list, modals, and inline styles
+- **`src/public/js/main.js`** - Frontend logic: uploads, previews, UI interactions
+- **`src/public/css/styles.css`** - All styling including dark mode
+- **`launcher.js`** - Standalone executable entry point with browser launch
 
-### Available Scripts
+### NPM Scripts
 
-| Script | Command | Description |
-|--------|---------|-------------|
-| `start` | `npm start` | Run the production server |
-| `dev` | `npm run dev` | Run with nodemon (auto-reload) |
-| `build` | `npm run build` | Build Windows executable |
-| `build:all` | `npm run build:all` | Build for all platforms |
+- `npm start` - Run production server
+- `npm run dev` - Run with nodemon (auto-reload)
+- `npm run build` - Build Windows executable
+- `npm run build:all` - Build for all platforms
+
+---
+
+## 📡 API Reference
+
+### Authentication
+
+- `GET /auth` - Show login page
+- `POST /auth` - Verify PIN
+- `POST /logout` - End session
+
+### File Operations
+
+- `GET /` - Dashboard with file list
+- `POST /upload` - Upload file (single)
+- `POST /upload-chunk` - Upload file chunk
+- `GET /download/:id` - Download file
+- `GET /preview/:id` - Stream file for preview
+- `DELETE /file/:id` - Delete file
+- `POST /download-bulk` - Prepare bulk download
+- `GET /download-bulk-zip` - Download ZIP archive
+
+### Settings
+
+- `GET /api/settings/pin` - Get current PIN
+- `POST /api/settings/change-pin` - Update PIN
 
 ---
 
 ## 🔧 Technical Overview
 
-### Architecture
+<details>
+<summary><strong>Architecture Diagram</strong> (click to expand)</summary>
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -241,60 +298,20 @@ express-shared-app/
 └─────────────────────────────────────────────────────────────┘
 ```
 
+</details>
+
 ### Technology Stack
 
-| Layer | Technology | Purpose |
-|-------|------------|---------|
-| **Runtime** | Node.js 18+ | JavaScript server environment |
-| **Framework** | Express.js 4.x | Web server and routing |
-| **Templating** | EJS | Server-side HTML rendering |
-| **UI Framework** | Materialize CSS | Material Design components |
-| **Icons** | Material Icons | Google's icon font |
-| **Packaging** | pkg | Standalone executable builder |
+![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=node.js) ![Express.js](https://img.shields.io/badge/Express.js-4.x-000000?logo=express) ![EJS](https://img.shields.io/badge/EJS-3.x-B4CA65) ![Materialize](https://img.shields.io/badge/Materialize-CSS-ee6e73)
 
-### Core Dependencies
+**Core Technologies:**
+- **Runtime:** Node.js 18+ • **Framework:** Express.js 4.x • **Templating:** EJS
+- **UI:** Materialize CSS + Material Icons • **Packaging:** pkg
 
-```json
-{
-  "express": "Web framework",
-  "ejs": "Template engine",
-  "multer": "File upload handling",
-  "express-session": "Session management",
-  "cookie-parser": "Cookie handling",
-  "compression": "Response compression",
-  "archiver": "ZIP file creation",
-  "open": "Browser launching"
-}
-```
+**Dependencies:** `express` `ejs` `multer` `express-session` `cookie-parser` `compression` `archiver` `open`
 
-### API Endpoints
-
-#### Authentication
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/auth` | Show login page |
-| `POST` | `/auth` | Verify PIN |
-| `POST` | `/logout` | End session |
-
-#### File Operations
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/` | Dashboard with file list |
-| `POST` | `/upload` | Upload file (single) |
-| `POST` | `/upload-chunk` | Upload file chunk |
-| `GET` | `/download/:id` | Download file |
-| `GET` | `/preview/:id` | Stream file for preview |
-| `DELETE` | `/file/:id` | Delete file |
-| `POST` | `/download-bulk` | Prepare bulk download |
-| `GET` | `/download-bulk-zip` | Download ZIP archive |
-
-#### Settings
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/settings/pin` | Get current PIN |
-| `POST` | `/api/settings/change-pin` | Update PIN |
-
-### Chunked Upload Flow
+<details>
+<summary><strong>Chunked Upload Flow</strong> (click to expand)</summary>
 
 ```
 1. Client detects file > 10MB
@@ -313,7 +330,10 @@ express-shared-app/
 6. Chunks are deleted, file moved to uploads/
 ```
 
-### Session & Auth Flow
+</details>
+
+<details>
+<summary><strong>Session & Auth Flow</strong> (click to expand)</summary>
 
 ```
 1. User visits any route
@@ -325,50 +345,57 @@ express-shared-app/
 7. Session persists until logout/expiry
 ```
 
-### File Storage
+</details>
 
-- **Uploads Directory**: `uploads/`
-- **Filename Format**: `{timestamp}-{random}-{originalname}`
-- **Metadata**: Extracted from filename on listing
-- **No Database**: File system is the source of truth
+**File Storage:**
+- Uploads: `uploads/` • Format: `{timestamp}-{random}-{originalname}`
+- No database - filesystem is source of truth
 
 ---
 
 ## 🛠️ Troubleshooting
 
-### Common Issues
+<details>
+<summary><strong>Common Issues</strong> (click to expand)</summary>
 
-| Problem | Solution |
-|---------|----------|
-| Can't access from other devices | Ensure same network, check firewall, use IP (not localhost) |
-| Upload fails | Check file size, try wired connection, keep tab active |
-| Executable won't start | Run as administrator, check antivirus |
-| Port already in use | Change PORT in environment or stop other servers |
-| QR code not working | Ensure device is on same network |
+<br>
 
-### Environment Variables
+**Can't access from other devices**
+- ✓ Ensure devices are on the same network
+- ✓ Check firewall settings
+- ✓ Use IP address (not localhost)
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `PORT` | `3000` | Server port |
+**Upload fails**
+- ✓ Check file size limits
+- ✓ Try wired connection for large files
+- ✓ Keep browser tab active during upload
+
+**Executable won't start**
+- ✓ Run as administrator
+- ✓ Check antivirus software
+- ✓ Ensure .exe is not blocked by Windows
+
+**Port already in use**
+- ✓ Change PORT environment variable
+- ✓ Stop other services on port 3000
+
+**QR code not working**
+- ✓ Ensure mobile device is on same network
+- ✓ Try manual IP entry
+
+</details>
 
 ---
 
 ## 🤝 Contributing
 
-1. **Fork** the repository
-2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
-3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
-4. **Push** to the branch (`git push origin feature/amazing-feature`)
-5. **Open** a Pull Request
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-### Code Style
-
-- Use ES6+ JavaScript
-- Follow existing code patterns
-- Add comments for complex logic
-- Test on both light and dark modes
-- Ensure mobile responsiveness
+**Code Style:** ES6+ JavaScript • Existing patterns • Comment complex logic • Test dark/light modes • Mobile responsive
 
 ---
 
@@ -380,13 +407,12 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## 🙏 Acknowledgments
 
-- [Materialize CSS](https://materializecss.com/) - UI Framework
-- [Material Icons](https://fonts.google.com/icons) - Icon set
-- [QRious](https://github.com/neocotic/qrious) - QR code generation
-- [pkg](https://github.com/vercel/pkg) - Executable packaging
+[Materialize CSS](https://materializecss.com/) • [Material Icons](https://fonts.google.com/icons) • [QRious](https://github.com/neocotic/qrious) • [pkg](https://github.com/vercel/pkg)
 
 ---
 
-<p align="center">
-  Made with ❤️ for seamless local file sharing
-</p>
+<div align="center">
+
+Made with ❤️ for seamless local file sharing
+
+</div>
